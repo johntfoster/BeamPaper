@@ -18,7 +18,7 @@
 \usepackage[section]{placeins}
 
 \usepackage{cleveref}
-\usepackage{autonum}
+%\usepackage{autonum}
 
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -153,46 +153,46 @@ Because the potential energy and force states are functions of \textit{pairs} of
 Other choices for the bond-pair potential function, such as \( w = (\pi - \theta)^2 \), are also possible, but result in more mathematically complex analysis.
 \subsection{Energy Equivalence}
 %
-We will begin with the assumptions from Euler beam theory: length much greater than thickness, small displacements, and small rotations. 
-The latter two assumptions allow us to simplify our equations. 
+To determine an appropriate choice of $\alpha$, we desire our peridynamic model to have an equivalent strain energy density to a classical Euler-Bernoulli beam in the \emph{local limit}, i.e. when the nonlocal length scale vanishes.  We will begin with the assumptions from Euler beam theory: the length of the beam is much greater than thickness, vertical displacements are small, and rotations are small. For small vertical displacments we have
 %
 \begin{equation}
-\label{eq:beam}
-\theta(\vstate{Y}{}{\xi})\approx \sin(\theta(\vstate{Y}{}{\xi})) = \frac{(\vstate{Y}{}{\xi})_y}{|\vstate{Y}{}{\xi}|} \approx \frac{y(x+\xi)-y(x)}{\xi}
-\end{equation}
-%
-\begin{equation}
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi},
 \label{eq:beamdtheta}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi}
 \end{equation}
 %
-Using a second order Taylor series to approximate $y$ around $x$, this last term in \cref{eq:beamdtheta} becomes a function of the second derivative of displacement, which we will call \(\kappa\).
+where $y$ is the vertical displacement of material point.  Using a Taylor series to expand the right-hand-side of eq.~(\ref{eq:beamdtheta})  
 %
 \begin{equation}
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2}+\mathcal{O}(\xi^3) =  \pi-\xi y'' +\mathcal{O}(\xi^3) 
 \label{eq:beamdtheta2}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2}+\mathcal{O}(\xi^3) =  \pi-\xi \kappa+\mathcal{O}(\xi^3) 
 \end{equation}
 %
-and if the curvatures are also small enough,
+substituting eq.~(\ref{eq:beamtheta2}) into the equation for the strain energy density of a single bond-pair,
 %
 \begin{align}
 \label{eq:continuousBeamw}
-w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \alpha\frac{\xi^2}{2}\kappa^2 +\mathcal{O}(\xi^4) .
+w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(y'')^2 +\mathcal{O}(\xi^4).
 \end{align}
 %
-If we use a weighting function \(\omega(\xi)=\omega(|\xi|)\), the resulting strain energy density for the continuous peridynamic beam is
+If we use a weighting function \(\omega(\xi)=\omega(|\xi|)\) and assume that the $\omega$ plays the role of a localization kernel, i.e. $\omega = 0 \, \forall \, \xi > \delta$, the resulting strain energy density, $W$, for any material point in the peridynamic beam is
 %
 \begin{equation}
-W \approx \int_{-\delta}^\delta \omega(\xi)\alpha\left(\frac{\xi^2}{2}\kappa^2 +\mathcal{O}(\xi^4)\right) d\xi = \frac{\alpha}{2}\left(\kappa^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 d\xi +\int_{-\delta}^\delta \omega(\xi)\mathcal{O}(\xi^4)d\xi\right) .
+W = \frac{\alpha}{2}(y'')^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 {\rm d}\xi + \mathcal{O}(\delta^5).
 \end{equation}
 %
-By choosing \(\alpha\) corresponding to our choices of weighting function, peridynamic horizon, and beam geometric and material properties, we can ensure that the potential energy density associated with a well-behaved deformation matches the prediction of Euler beam theory.
+Equating $W$ with the classical Euler-Bernoulli beam strain-energy density, $\Omega$, and taking the limit as $\delta \to 0$ we can solve for $\alpha$
 %
 \begin{align}
-\label{eq:classicbeam}
-\alpha = \frac{c}{m} ;\; c= EI ;\; m=\int_{-\delta}^\delta \omega(\xi)\xi^2 d\xi \implies W=\frac{EI}{2}\kappa^2+\mathcal{O}(\delta^2)
+    \lim_{\delta \to 0}  W &= \Omega, \notag \\
+    \frac{\alpha}{2} m (y'')^2 &= \frac{EI}{2} (y'')^2, \notag \\
+    \alpha &= \frac{EI}{m},
+\label{eq:alpha}
 \end{align}
 %
+with 
+\begin{equation}
+    m = \int_{-\delta}^{\delta} \omega(\xi) \xi^2 {\rm d}\xi \notag.
+\end{equation}
 
 
 \subsection{Weighting Function and Perfect Plasticity}
