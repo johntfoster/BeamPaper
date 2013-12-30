@@ -84,7 +84,7 @@ By contrast, the peridynamic model is strongly nonlocal and casts material behav
 %
 \begin{equation}
 \label{eq:PDCoPV}
-\rho(\mathbf{x})\ddot{\mathbf{u}}(\mathbf{x}) = \int_\Omega \mathbi{f}(\mathbf{x},\mathbf{q}) dV_\mathbf{q}  + \mathbf{b}(\mathbf{x})
+\rho(\mathbf{x})\ddot{\mathbf{u}}(\mathbf{x}) = \int_\Omega \mathbi{f}(\mathbf{x},\mathbf{q}) dV_\mathbf{q}  + \mathbf{b}(\mathbf{x}) \notag
 \end{equation}
 %
 rather than the classical \textit{differential} equation.
@@ -104,7 +104,7 @@ Conservation of linear momentum in the \textit{state based} peridynamic formulat
 %
 \begin{equation}
 \label{eq:PDstateEoM}
-\rho(\mathbf{x})\ddot{\mathbf{u}}(\mathbf{x}) = \int_\Omega (\vstate{T}{\mathbf{x}}{\mathbf{q}-\mathbf{x}}-\vstate{T}{\mathbf{q}}{\mathbf{x}-\mathbf{q}}) dV_\mathbf{q}  + \mathbf{b}(\mathbf{x}),
+\rho(\mathbf{x})\ddot{\mathbf{u}}(\mathbf{x}) = \int_\Omega (\vstate{T}{\mathbf{x}}{\mathbf{q}-\mathbf{x}}-\vstate{T}{\mathbf{q}}{\mathbf{x}-\mathbf{q}}) dV_\mathbf{q}  + \mathbf{b}(\mathbf{x}),\notag
 \end{equation}
 %
 in which $\vstate{T}{\;}{\;}$ is a \textit{force vector-state} that maps the vector in angle brackets, $\langle \rangle$, originating at the point in square brackets, [ ], to a force vector acting on that point.
@@ -167,17 +167,17 @@ where $y$ is the vertical displacement of material point.  Using a Taylor series
 \label{eq:beamdtheta2}
 \end{equation}
 %
-substituting eq.~(\ref{eq:beamtheta2}) into the equation for the strain energy density of a single bond-pair,
+substituting eq.~(\ref{eq:beamdtheta2}) into the equation for the strain energy density of a single bond-pair,
 %
 \begin{align}
 \label{eq:continuousBeamw}
-w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(y'')^2 +\mathcal{O}(\xi^4).
+w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(y'')^2 +\mathcal{O}(\xi^4).\notag
 \end{align}
 %
 If we use a weighting function \(\omega(\xi)=\omega(|\xi|)\) and assume that the $\omega$ plays the role of a localization kernel, i.e. $\omega = 0 \, \forall \, \xi > \delta$, the resulting strain energy density, $W$, for any material point in the peridynamic beam is
 %
 \begin{equation}
-W = \frac{\alpha}{2}(y'')^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 {\rm d}\xi + \mathcal{O}(\delta^5).
+W = \frac{\alpha}{2}(y'')^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 {\rm d}\xi + \mathcal{O}(\delta^5).\notag
 \end{equation}
 %
 Equating $W$ with the classical Euler-Bernoulli beam strain-energy density, $\Omega$, and taking the limit as $\delta \to 0$ we can solve for $\alpha$
@@ -215,16 +215,16 @@ By comparing the formulations for the moments carried by the Euler beam in \cref
 \end{figure}
 %
 \begin{align}
-M_\text{classical}&=\int_{-\frac{t}{2}}^{\frac{t}{2}} \sigma \; y \; dA && = \int_{-\frac{t}{2}}^{\frac{t}{2}} E \kappa \; y^2 \; b(y) dy \\
+M_\text{classical}&=\int_{-\frac{t}{2}}^{\frac{t}{2}} \sigma \; y \; dA && = \int_{-\frac{t}{2}}^{\frac{t}{2}} E \kappa \; y^2 \; b(y) dy\notag \\
 %
-M_\text{PD}&=\int_{-\delta}^{\delta} \vstate{T}{}{\xi}\; \xi \; d\xi & = \int_{-\delta}^{\delta} \alpha \frac{\sin(\Delta\theta)}{|\xi|} \; \xi \; \omega(\xi) d\xi\: & \approx \int_{-\delta}^{\delta} \alpha \kappa |\xi| \; \omega(\xi) d\xi
+M_\text{PD}&=\int_{-\delta}^{\delta} \vstate{T}{}{\xi}\; \xi \; d\xi & = \int_{-\delta}^{\delta} \alpha \frac{\sin(\Delta\theta)}{|\xi|} \; \xi \; \omega(\xi) d\xi\: & \approx \int_{-\delta}^{\delta} \alpha \kappa |\xi| \; \omega(\xi) d\xi\notag
 \end{align}
 %
 The term \(y\) is the distance from the beam's neutral axis and \(b(y)\) is the width of the beam at that distance from the neutral axis. 
 The similarity between classical and peridynamic moment formulations suggests a possible formulation for the weighting function:
 %
 \begin{equation}
-\omega(\xi) = |\xi| b\left(y\right) \text{at}\; y=\frac{\xi}{\delta} \frac{t}{2}
+\omega(\xi) = |\xi| b\left(y\right) \text{at}\; y=\frac{\xi}{\delta} \frac{t}{2}\notag
 \end{equation}
 %
 \begin{figure}[h]
@@ -254,8 +254,8 @@ For small curvatures \(\Delta\theta = \xi\kappa\implies\Delta\theta_c = \frac{2\
 For curvatures \(|\kappa| > \kappa_c=\frac{2\epsilon_c}{t}\), the radius within which bonds are in the elastic region is \(\delta_e = \delta \frac{\kappa_c}{\kappa}\), and parallels the distance from the beam centerline that fibers are in the elastic region \(y_e = \frac{t}{2} \frac{\kappa_c}{\kappa}\)
 %
 \begin{align}
-  M_\text{classical} &= 2 \int_{0}^{y_e}E b(y)y^2 \kappa dy +2 \int_{y_e}^{\frac{t}{2}}E b(y) \epsilon_c y dy \\
-  M_\text{PD} &= 2 \int_{0}^{\delta_e}\alpha \omega(\xi) \xi^2 \kappa d\xi +2 \int_{\delta_e}^{\delta}\alpha \omega(\xi) \Delta\theta_c \xi d\xi 
+  M_\text{classical} &= 2 \int_{0}^{y_e}E b(y)y^2 \kappa dy +2 \int_{y_e}^{\frac{t}{2}}E b(y) \epsilon_c y dy\notag \\
+  M_\text{PD} &= 2 \int_{0}^{\delta_e}\alpha \omega(\xi) \xi^2 \kappa d\xi +2 \int_{\delta_e}^{\delta}\alpha \omega(\xi) \Delta\theta_c \xi d\xi \notag
 \end{align}
 %
 Of course, as long as the force is independent of history, this model only represents a nonlinear elastic material. 
@@ -267,8 +267,8 @@ By keeping track of the plastic deformation \(\theta^p (\xi) = \theta-\theta_c\)
 If we keep an additional term from the Taylor series approximation of \cref{eq:beamdtheta}, we recover a slightly more complex expressions for change in angle
 %
 \begin{equation}
-\label{eq:beamdtheta2}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 y}{\partial x^4}  +\mathcal{O}(\xi^5)=  \pi-\xi \kappa-\frac{\xi^3}{12} \kappa''+\mathcal{O}(\xi^5)
+\label{eq:beamdthetaHOT}
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 y}{\partial x^4}  +\mathcal{O}(\xi^5)=  \pi-\xi \kappa-\frac{\xi^3}{12} \kappa''+\mathcal{O}(\xi^5)\notag
 \end{equation}
 %
 and for the strain energy
@@ -279,14 +279,14 @@ and for the strain energy
 %
 %
 \begin{equation}
-W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{\xi^4}{24}\kappa^4+\mathcal{O}(\xi^6)) d\xi .
+W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{\xi^4}{24}\kappa^4+\mathcal{O}(\xi^6)) d\xi .\notag
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
 We can picture a nonlocal modulus based on the nonlocal curvature \(\bar{\kappa}= (\kappa + \frac{\xi^2}{12}\kappa'')\), so that 
 %
 \begin{equation}
-W \approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .
+W \approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
 \end{equation}
 %  
 This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
@@ -299,14 +299,14 @@ For analysis purposes, it is often useful to represent a continuum part with a d
 Discretizing the bond-pair model is primarily matter of exchanging integrals for sums. 
 %
 \begin{align}
-\label{eq:discreteBeamw}
-w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \frac{\alpha}{2}\left(\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi}\right)^2
+%\label{eq:discreteBeamw}
+w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \frac{\alpha}{2}\left(\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi}\right)^2 \notag
 \end{align}
 %
 \begin{align}
 \label{eq:discretebeam}
 \alpha &= \frac{c\; \Delta x}{m} ;\; c= EI ;\; m=\sum_{i=1}^n \omega(\xi_i)\xi_i^2 \implies \nonumber \\
-W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{y(x+\xi_i)-2y(x)+y(x-\xi_i)}{\xi_i}\right)^2
+W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{y(x+\xi_i)-2y(x)+y(x-\xi_i)}{\xi_i}\right)^2\notag
 \end{align}
 %
 
