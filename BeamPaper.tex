@@ -292,10 +292,10 @@ If we keep an additional term from the Taylor series approximation of \cref{eq:b
 \begin{equation}
 \label{eq:beamdthetaHOT}
 %\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 y}{\partial x^4}  +\mathcal{O}(\xi^5)=  \pi-\xi \kappa-\frac{\xi^3}{12} \kappa''+\mathcal{O}(\xi^5)\notag
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \arctan\left(\pi-\xi \frac{\partial^2 y}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 y}{\partial x^4}  +\mathcal{O}(\xi^5)\right)\notag
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \arctan\left(\pi-\xi \frac{\partial^2 v}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 v}{\partial x^4}  +\mathcal{O}(\xi^5)\right)\notag
 \end{equation}
 %
-and for the strain energy (substituting \(\kappa = y''\) for readability),
+and for the strain energy (substituting \(\kappa = v''\) for readability),
 %
 %\begin{equation}
 %W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{3\; \xi^4}{8}\kappa^4+\mathcal{O}(\xi^6)) d\xi .
@@ -327,18 +327,40 @@ Discretizing the bond-pair model is primarily matter of exchanging integrals for
 %
 \begin{align}
 %\label{eq:discreteBeamw}
-w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \frac{\alpha}{2}\left(\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi}\right)^2 \notag
+w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \frac{\alpha}{2}\left(\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi}\right)^2 \notag
 \end{align}
 %
 \begin{align}
 \label{eq:discretebeam}
 \alpha &= \frac{c\; \Delta x}{m} ;\; c= EI ;\; m=\sum_{i=1}^n \omega(\xi_i)\xi_i^2 \implies \nonumber \\
-W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{y(x+\xi_i)-2y(x)+y(x-\xi_i)}{\xi_i}\right)^2\notag
+W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{v(x+\xi_i)-2v(x)+v(x-\xi_i)}{\xi_i}\right)^2\notag
 \end{align}
 %
-
-Discretizing the bond-pair model as proposed above requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(y(x-\xi_i)\) is ill-defined. 
+Discretization of the original model results in the equation of motion
+\begin{equation}
+\rho(\mathbf{x})\mathbf{\ddot{u}}(\mathbf{x}) = \mathbf{f}(\mathbf{x})+\sum_i \omega(\xi_i)\left\{\frac{\alpha(\mathbf{x})}{|\mathbf{p}_i |}\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times\left[\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \frac{\mathbf{q}_i}{|\mathbf{q}_i |}\right]-\frac{\alpha(\mathbf{x}+\boldsymbol{\xi}_i)}{|\mathbf{p}_i |}\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times\left[\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times \frac{\mathbf{r}_i}{|\mathbf{r}_i |}\right]\right\}\notag
+\end{equation}
+with
+\begin{align}
+\mathbf{p}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
+\mathbf{q}_i &= -\boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}-\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
+\mathbf{r}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+2\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i).\notag
+\end{align}
+and for small displacements and rotations in a uniform beam,
+\begin{equation}
+\rho(x)\ddot{v}(x) = f(x)+\alpha \sum_i 2\omega(\xi_i)\frac{v(x-2\xi_i)-4v(x-\xi_i)+6v(x)-4v(x+\xi_i)+v(x+2\xi_i)}{\xi_i^2}\notag
+\end{equation}
+Discretizing the bond-pair model as proposed above requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(x-\xi_i)\) is ill-defined. 
 For this reason, the discretization does not allow for areas of higher and lower ``resolution''. 
+%
+\subsection{Numerical Method}
+\label{sec:NumMethod}
+Model behavior was evaluated by implementing the discretized equation of motion.
+The case of a beam simply supported at both ends was chosen for simplicity in both evaluation and comparison.
+Boundary conditions such as clamped supports and applied moments require careful treatment to ensure both meaningful results and ease of computation.
+
+Deformations for quasistatic loading were computed by implicitly solving the zero-acceleration discrete equation of motion with a Newton's Method solver.
+%
 \subsection{Results}
 \label{sec:Results}
 The simplest test case for this model is a linear-elastic beam with a square profile.
