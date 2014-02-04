@@ -177,35 +177,39 @@ Other choices for the bond-pair potential function, such as \( w = (\pi - \theta
 To determine an appropriate choice of $\alpha$, we desire our peridynamic model to have an equivalent strain energy density to a classical Euler-Bernoulli beam in the \emph{local limit}, i.e. when the nonlocal length scale vanishes.  We will begin with the assumptions from Euler beam theory: the length of the beam is much greater than thickness, vertical displacements are small, and rotations are small. For small vertical displacments we have
 %
 \begin{equation}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\frac{y(x+\xi)-2y(x)+y(x-\xi)}{\xi},
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi},
 \label{eq:beamdtheta}
 \end{equation}
 %
-where $y$ is the vertical displacement of material point.  Using a Taylor series to expand the right-hand-side of eq.~(\ref{eq:beamdtheta})  
+where $v$ is the vertical displacement of material point.  Using a Taylor series to expand the right-hand-side of eq.~(\ref{eq:beamdtheta})  
 %
 \begin{equation}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 y}{\partial x^2}+\mathcal{O}(\xi^3) =  \pi-\xi y'' +\mathcal{O}(\xi^3) 
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 v}{\partial x^2}+\mathcal{O}(\xi^3) =  \pi-\xi \kappa +\mathcal{O}(\xi^3); 
 \label{eq:beamdtheta2}
 \end{equation}
+with
+\begin{equation}
+\kappa = \frac{\partial^2 v}{\partial x^2}.\notag
+\end{equation}
 %
-substituting eq.~(\ref{eq:beamdtheta2}) into the equation for the strain energy density of a single bond-pair,
+Substituting eq.~(\ref{eq:beamdtheta2}) into the equation for the strain energy density of a single bond-pair,
 %
 \begin{align}
 \label{eq:continuousBeamw}
-w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(y'')^2 +\mathcal{O}(\xi^4).\notag
+w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(\kappa)^2 +\mathcal{O}(\xi^4).\notag
 \end{align}
 %
 If we use a weighting function \(\omega(\xi)=\omega(|\xi|)\) and assume that the $\omega$ plays the role of a localization kernel, i.e. $\omega = 0 \, \forall \, \xi > \delta$, the resulting strain energy density, $W$, for any material point in the peridynamic beam is
 %
 \begin{equation}
-W = \frac{\alpha}{2}(y'')^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 {\rm d}\xi + \mathcal{O}(\delta^5).\notag
+W = \frac{\alpha}{2}\kappa^2 \int_{-\delta}^\delta \omega(\xi)\xi^2 {\rm d}\xi + \mathcal{O}(\delta^5).\notag
 \end{equation}
 %
 Equating $W$ with the classical Euler-Bernoulli beam strain-energy density, $\Omega$, and taking the limit as $\delta \to 0$ we can solve for $\alpha$
 %
 \begin{align}
     \lim_{\delta \to 0}  W &= \Omega, \notag \\
-    \frac{\alpha}{2} m (y'')^2 &= \frac{EI}{2} (y'')^2, \notag \\
+    \frac{\alpha}{2} m \kappa^2 &= \frac{EI}{2} \kappa^2, \notag \\
     \alpha &= \frac{EI}{m},
 \label{eq:alpha}
 \end{align}
@@ -295,7 +299,7 @@ If we keep an additional term from the Taylor series approximation of \cref{eq:b
 \theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \arctan\left(\pi-\xi \frac{\partial^2 v}{\partial x^2} -\frac{\xi^3}{12} \frac{\partial^4 v}{\partial x^4}  +\mathcal{O}(\xi^5)\right)\notag
 \end{equation}
 %
-and for the strain energy (substituting \(\kappa = v''\) for readability),
+and for the strain energy (again substituting \(\kappa = v''\) for readability),
 %
 %\begin{equation}
 %W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{3\; \xi^4}{8}\kappa^4+\mathcal{O}(\xi^6)) d\xi .
@@ -308,15 +312,33 @@ W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
-We can picture a nonlocal modulus based on the nonlocal curvature \(\bar{\kappa}= (\kappa + \frac{\xi^2}{6}\kappa'')\), so that 
+We can picture a bending resistance based on the nonlocal curvature  \(\bar{\kappa}\), so that 
 %
-\begin{equation}
-W \approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
-\end{equation}
+\begin{align}
+\alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies \notag \\
+W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
+\end{align}
 %  
-This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
 The same analysis can be taken further to obtain higher-order energy terms with even powers of \(\xi\) and even order derivatives of \(\kappa\). 
-Not all of these higher-order terms can be separated into the product of a local curvature and nonlocal modulus.
+Not all of these higher-order terms can be separated into the product of a local curvature and nonlocal bending resistance.
+
+Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material.
+\begin{equation}
+\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}')\notag
+\end{equation}
+In the local limit these relationships take the form of higher-order gradients.
+Using a modified bessel function (second kind) nonlocal modulus results in a relationship between \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) 
+\begin{align}
+\left(1-\tau^2l^2\nabla^2\right)\mathbf{t}&=\boldsymbol{\sigma},\notag
+\end{align}
+in which \(\tau^2l^2\) is a scale-based material parameter.
+For well-behaved \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) and small values of \(\tau^2l^2\) we can see that this relationship could be reformulated as
+\begin{equation}
+\mathbf{t}=\left(1+\tau^2l^2\nabla^2\right)\boldsymbol{\sigma}.\notag
+\end{equation}
+
+%This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
+The similarity is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
 
 \section{Numerical Simulation}
 \label{sec:Numerical}
