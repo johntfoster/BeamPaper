@@ -51,7 +51,7 @@
   \begin{picture}(1,0.16094089)%
     \put(0,0){\includegraphics[width=\unitlength]{BondPairBending.eps}}%
     \put(0.10315561,0.00214572){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(\rho = \sfrac{1}{\kappa}\)}}}%
-    \put(0.06447226,0.07951243){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(y \approx \frac{(\xi)^2}{2}\kappa\)}}}%
+    \put(0.06447226,0.07951243){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(v \approx \frac{(\xi)^2}{2}\kappa\)}}}%
     \put(0.30946684,0.01504017){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(\theta \approx \frac{\xi}{2}\kappa\)}}}%
     \put(0.81235047,0.05372352){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(dM \overset{?}{=} \xi \theta d\xi\)}}}%
     \put(0.28367794,0.05372352){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\(-\delta\)}}}%

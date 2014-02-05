@@ -322,19 +322,19 @@ W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\ka
 The same analysis can be taken further to obtain higher-order energy terms with even powers of \(\xi\) and even order derivatives of \(\kappa\). 
 Not all of these higher-order terms can be separated into the product of a local curvature and nonlocal bending resistance.
 
-Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material.
+Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus (denoted here as \(K(|\mathbf{x}'-\mathbf{x}|,\tau)\)) that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material through the integral
 \begin{equation}
-\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}')\notag
+\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}').\notag
 \end{equation}
 In the local limit these relationships take the form of higher-order gradients.
-Using a modified bessel function (second kind) nonlocal modulus results in a relationship between \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) 
+Using a decaying exponential nonlocal modulus results in a relationship between \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) 
 \begin{align}
-\left(1-\tau^2l^2\nabla^2\right)\mathbf{t}&=\boldsymbol{\sigma},\notag
+\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\mathbf{t}&=\boldsymbol{\sigma},\notag
 \end{align}
 in which \(\tau^2l^2\) is a scale-based material parameter.
-For well-behaved \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) and small values of \(\tau^2l^2\) we can see that this relationship could be reformulated as
+For well-behaved \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) and small values of \(\sigma''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
 \begin{equation}
-\mathbf{t}=\left(1+\tau^2l^2\nabla^2\right)\boldsymbol{\sigma}.\notag
+\mathbf{t}=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\boldsymbol{\sigma}.\notag
 \end{equation}
 
 %This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
