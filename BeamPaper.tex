@@ -312,10 +312,11 @@ W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
-We can picture a bending resistance based on the nonlocal curvature  \(\bar{\kappa}\), so that 
+We can picture a bending resistance based on the bond length and the nonlocal curvature  \(\bar{\kappa}\), so that 
 %
 \begin{align}
-\alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies \notag \\
+\label{eq:NLbending}
+ \omega(\xi)\alpha\bar{\kappa}&=  \omega(\xi)\alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies  \\
 W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
 \end{align}
 %  
@@ -327,18 +328,30 @@ Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins
 \mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}').\notag
 \end{equation}
 In the local limit these relationships take the form of higher-order gradients.
-Using a decaying exponential nonlocal modulus results in a relationship between \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) 
+Using a 1-dimensional decaying exponential nonlocal modulus \(K(|x|,\tau)=\frac{1}{l\tau}e^{-\frac{|x|}{l\tau}}\)results in a relationship between \(t\) and \(\sigma\) 
 \begin{align}
-\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\mathbf{t}&=\boldsymbol{\sigma},\notag
+\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)t&=\sigma,\notag
 \end{align}
 in which \(\tau^2l^2\) is a scale-based material parameter.
-For well-behaved \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) and small values of \(\sigma''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
+For well-behaved \(t\) and \(\sigma\) and small values of \(\sigma''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
 \begin{equation}
-\mathbf{t}=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\boldsymbol{\sigma}.\notag
+\label{eq:NLstress}
+t=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\sigma.\notag
 \end{equation}
+If we consider the results of the previous section and let \(dM = y\sigma dA\) and \(\sigma = Ey\kappa\), the contribution to moment resulting from Eringen's nonlocal elasticity in a fiber at \(y\)
+\begin{equation}
+\label{eq:EringenMoment}
+E y^2 (\kappa+\tau^2l^2\kappa''), \\
+\end{equation}
+and the resulting strain energy
+\begin{equation}
+\label{eq:EringenEnergy}
+\int_{-\frac{t}{2}}^{\frac{t}{2}} b(y) E \frac{y^2}{2} \kappa (\kappa+\tau^2l^2\kappa'')  dy,\notag
+\end{equation}
+bear a striking resemblance to \cref{eq:NLbending}.
 
 %This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
-The similarity is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
+The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
 
 \section{Numerical Simulation}
 \label{sec:Numerical}
