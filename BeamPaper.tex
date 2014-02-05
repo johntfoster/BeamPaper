@@ -254,13 +254,22 @@ The similarity between classical and peridynamic moment formulations suggests a 
 \end{equation}
 %
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{WeightProfile.eps_tex}
-\caption{A cross-section dependent weight function}
-\label{fig:WeightProfile}
+\minipage[t]{0.5\textwidth}
+ \centering
+  \subinputfrom{\diagrampath}{WeightProfile_Uniform.eps_tex}
+\caption{Weight function for a beam of rectangular cross-section}
+\label{fig:WeightProfileUniform}
+\endminipage\hfill
+\minipage[t]{0.5\textwidth}%
+  \centering
+  \subinputfrom{\diagrampath}{WeightProfile_Ibeam.eps_tex}
+\caption{Weight function for an I-beam}
+\label{fig:WeightProfileIbeam}
+\endminipage
 \end{figure}
 %
 This weight function analogizes the relative contributions of bond pairs of different lengths to the relative contributions of fibers at different distances from the centerline. 
-An example is shown in \cref{fig:WeightProfile}.
+Examples are shown in \cref{fig:WeightProfileUniform,fig:WeightProfileIbeam}.
 While this weighting function offers no advantages over a uniform weight function in the case of the linearly elastic beam, it offers a way to model advancing plasticity.
 
 In a bent Elastic Perfectly Plastic beam, axial fibers are still stretched in proportion to their distance from the neutral axis, but the relationship \(\sigma = E\epsilon = Ey\kappa\) only holds for \(|\epsilon| = |y\kappa| < \epsilon_c\). 
@@ -401,13 +410,13 @@ Deformations for quasistatic loading were computed by implicitly solving the zer
 The simplest test case for this model is a linear-elastic beam with a square profile.
 The models below were constrained to purely vertical movement of each point in order to reduce the total number of degrees of freedom, speeding evaluation and improving convergence.
 For comparison, equivalent models are created and analyzed in Abaqus 6.12 to verify simple cases.
-Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:eppt_g100}.
+Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:elastic_g2000}.
 
 \begin{figure}[h]
   \centering
-  \scalebox{.55}{\input{\plotpath/elastic_h20_g2000.pgf}}
+  \scalebox{.65}{\input{\plotpath/elastic_h20_g2000_edit.pgf}}
   \caption{The uniform-load elastic beam is accurately modeled with few nodes}
-  \label{fig:eppt_g100}
+  \label{fig:elastic_g2000}
 \end{figure}
 
 As an elastic-perfectly-plastic beam exceeds the elastic limit of its material, plastic zones begin to grow on the top and bottom of the beam's cross section.
@@ -415,7 +424,7 @@ This behavior is mimicked by the plasticity of the longest bond-pairs, producing
 To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
 \begin{figure}[h]
   \centering
-  \scalebox{.55}{\input{\plotpath/eppu_h10_g2000.pgf}}
+  \scalebox{.65}{\input{\plotpath/eppu_h10_g2000_edit.pgf}}
   \caption{The elastic perfectly-plastic beam requires finer discretization}
   \label{fig:eppu_h10_g2000}
 \end{figure}
@@ -425,16 +434,20 @@ For a beam in bending, the residual deformations can be seen in a beam that has 
 This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticity}. 
 Accurate residual deformation modeling requires both a relatively small horizon and a fairly large number of nodes.
 
-
+%
 \begin{figure}[h]
-\minipage{0.45\textwidth}
-  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000.pgf}}
+\minipage[t]{0.5\textwidth}
+ \centering
+  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+\caption{N-convergence}
+\label{fig:ResidualPlasticityN}
 \endminipage\hfill
-\minipage{0.45\textwidth}%
-  \scalebox{.45}{\input{\plotpath/unloaded_n1000_g2000.pgf}}
+\minipage[t]{0.5\textwidth}%
+  \centering
+  \scalebox{.45}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+\caption{H-convergence}
+\label{fig:ResidualPlasticityH}
 \endminipage
-\caption{Residual plastic deformation in an unloaded beam}
-\label{fig:ResidualPlasticity}
 \end{figure}
 
 It is more difficult to verify the brittle material model because brittle failure is unstable.
