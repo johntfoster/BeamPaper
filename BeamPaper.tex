@@ -235,7 +235,7 @@ By comparing the formulations for the moments carried by the Euler beam in \cref
 \end{figure}
 %%
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{BondPairBending.eps_tex}
+\subinputfrom{\diagrampath}{BondPairBending_edit.eps_tex}
 \caption{Bond-pair moment contribution}
 \label{fig:BPBending}
 \end{figure}
@@ -414,7 +414,7 @@ Even a coarse discretization successfully reproduces the elastically deformed be
 
 \begin{figure}[h]
   \centering
-  \scalebox{.65}{\input{\plotpath/elastic_h20_g2000_edit.pgf}}
+  \scalebox{.6}{\input{\plotpath/elastic_h20_g2000.pgf}}
   \caption{The uniform-load elastic beam is accurately modeled with few nodes}
   \label{fig:elastic_g2000}
 \end{figure}
@@ -424,34 +424,48 @@ This behavior is mimicked by the plasticity of the longest bond-pairs, producing
 To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
 \begin{figure}[h]
   \centering
-  \scalebox{.65}{\input{\plotpath/eppu_h10_g2000_edit.pgf}}
+  \scalebox{.6}{\input{\plotpath/eppu_h10_g2000.pgf}}
   \caption{The elastic perfectly-plastic beam requires finer discretization}
   \label{fig:eppu_h10_g2000}
 \end{figure}
 
 A material that is plastically deformed does not return to its original state when unloaded.
 For a beam in bending, the residual deformations can be seen in a beam that has been loaded beyond the onset of plastic deformation and then unloaded.
-This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticity}. 
+This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticityN,fig:ResidualPlasticityH}. 
 Accurate residual deformation modeling requires both a relatively small horizon and a fairly large number of nodes.
 
 %
 \begin{figure}[h]
-\minipage[t]{0.5\textwidth}
- \centering
-  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
-\caption{N-convergence}
-\label{fig:ResidualPlasticityN}
-\endminipage\hfill
-\minipage[t]{0.5\textwidth}%
   \centering
-  \scalebox{.45}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
-\caption{H-convergence}
-\label{fig:ResidualPlasticityH}
-\endminipage
+  \scalebox{.6}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+  \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
+  \label{fig:ResidualPlasticityN}
 \end{figure}
+%
+\begin{figure}[h]
+  \centering
+  \scalebox{.6}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+  \caption{Accurately modeling residual plastic deformation also requires a small horizon}
+  \label{fig:ResidualPlasticityH}
+\end{figure}
+%
+%\begin{figure}[h]
+%\minipage[t]{0.5\textwidth}
+% \centering
+%  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+%\caption{N-convergence}
+%\label{fig:ResidualPlasticityN}
+%\endminipage\hfill
+%\minipage[t]{0.5\textwidth}%
+%  \centering
+%  \scalebox{.45}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+%\caption{H-convergence}
+%\label{fig:ResidualPlasticityH}
+%\endminipage
+%\end{figure}
 
 It is more difficult to verify the brittle material model because brittle failure is unstable.
-When a crack begins, moment is transferred to other bond pairs, and failure progresses creating a plastic hinge.
+When a crack begins, moment is transferred to other bond pairs, and failure progresses until every pair of bonds surrounding a node are broken, creating a hinge at that node.
 This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Health'' represents the fraction of bond-pairs about each node that have not failed.
 
 \begin{figure}[h]
