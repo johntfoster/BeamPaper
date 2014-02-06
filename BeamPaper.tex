@@ -76,7 +76,7 @@ Because many analyses of interest are partly or wholly comprised of these types 
 %The fifth section demonstrates the beam model with simple test cases.
 The remainder of this introduction reviews other nonlocal work and provides a brief introduction to peridynamics, including state based models.
 \Cref{sec:ModelDev} presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
-\Cref{sec:EringenCompare} demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
+\Cref{sec:EringenCompare} demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons.
 \Cref{sec:Numerical} demonstrates the beam model with simple test cases.
 %
 \subsection{Nonlocal Beam Models}
@@ -361,6 +361,8 @@ bear a striking resemblance to \cref{eq:NLbending}.
 
 %This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
 The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
+It is therefore unsurprising that, like Eringen's nonlocal elasticity, the peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
+Instead, the advantage of peridynamic models is their natural handling of discontinuities.
 
 \section{Numerical Simulation}
 \label{sec:Numerical}
