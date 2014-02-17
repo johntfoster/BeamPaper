@@ -1,4 +1,4 @@
-\documentclass[11pt]{amsart}
+\documentclass[5p,twocolumn]{elsarticle}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
@@ -40,12 +40,25 @@
 	\ifstrempty{#3}{}{\langle #3 \rangle}%
 	}
 
-
-\title{Peridynamic Beams: \\ A Non-ordinary, State Based Model}
-\author{James O'Grady \and John T. Foster}
-%\date{}                                           % Activate to display a given date or no date
+\journal{International Journal of Solids and Structures}
 
 \begin{document}
+
+\begin{frontmatter}
+
+\title{Peridynamic Beams: \\ A Non-ordinary, State Based Model}
+
+\author[utsa]{James O'Grady\corref{cor1}}
+\ead{jogrady@gmail.com}
+
+\author[utsa]{John Foster\corref{cor2}}
+\ead{john.foster@utsa.edu}
+
+\cortext[cor1]{Principal Corresponding author}
+\cortext[cor2]{Corresponding author}
+
+\address[utsa]{The University of Texas at San Antonio, One UTSA Circle, San Antonio, TX 78249}
+%\date{}                                           % Activate to display a given date or no date
 
 \begin{abstract}
 This paper develops a new peridynamic state based model to represent the bending of an Euler-Bernoulli beam.
@@ -56,7 +69,12 @@ As the peridynamic horizon approaches 0, it reduces to the classical Euler-Berno
 Simple test cases demonstrate the model's performance.
 \end{abstract}
 
-\maketitle
+\begin{keyword}
+Peridynamics \sep non-ordinary models
+\end{keyword}
+
+\end{frontmatter}
+%\maketitle
 
 \section{Introduction}
 A goal of many mechanical engineering analyses is the prediction and description of material failure.
@@ -141,7 +159,8 @@ Foster et al.\ \cite{foster2010viscoplasticity} and Warren et al.\ \cite{warren2
 Consider the material model illustrated in \cref{fig:SimpleBondpair} in which every bond vector emanating from a point is connected by a rotational spring to its opposite emanating from that same point.
 %
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{simpleBondPair.eps_tex}
+\centering
+\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{simpleBondPair.eps_tex}}
 \caption{Illustration of a bond pair model that resists angular deformation}
 \label{fig:SimpleBondpair}
 \end{figure}
@@ -157,7 +176,8 @@ Though it looks complex, \cref{eq:SillingForceNO} indicates a bond force perpend
 The force magnitude is proportional to the sine of the angle between the bonds divided by the length of the deformed bond. 
 %
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{bondPair.eps_tex}
+\centering
+\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{bondPair.eps_tex}}
 \caption{Deformation and force vector states}
 \label{fig:Bondpair}
 \end{figure}
@@ -177,10 +197,11 @@ To determine an appropriate choice of $\alpha$, we desire our peridynamic model 
 %
 where $v$ is the vertical displacement of material point.  Using a Taylor series to expand the right-hand-side of eq.~(\ref{eq:beamdtheta})  
 %
-\begin{equation}
-\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\xi \frac{\partial^2 v}{\partial x^2}+\mathcal{O}(\xi^3) =  \pi-\xi \kappa +\mathcal{O}(\xi^3); 
+\begin{align}
+\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) &\approx \pi-\xi \frac{\partial^2 v}{\partial x^2}+\mathcal{O}(\xi^3) \notag \\
+&\approx  \pi-\xi \kappa +\mathcal{O}(\xi^3); 
 \label{eq:beamdtheta2}
-\end{equation}
+\end{align}
 with
 \begin{equation}
 \kappa = \frac{\partial^2 v}{\partial x^2}.\notag
@@ -190,7 +211,8 @@ Substituting eq.~(\ref{eq:beamdtheta2}) into the equation for the strain energy 
 %
 \begin{align}
 \label{eq:continuousBeamw}
-w = \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] = \omega(\xi) \alpha\frac{\xi^2}{2}(\kappa)^2 +\mathcal{O}(\xi^4).\notag
+w &= \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \notag\\
+&\approx \omega(\xi) \alpha\frac{\xi^2}{2}(\kappa)^2 +\mathcal{O}(\xi^4).\notag
 \end{align}
 %
 If we use a weighting function \(\omega(\xi)=\omega(|\xi|)\) and assume that the $\omega$ plays the role of a localization kernel, i.e. $\omega = 0 \, \forall \, \xi > \delta$, the resulting strain energy density, $W$, for any material point in the peridynamic beam is
@@ -223,21 +245,23 @@ If the fibers are linearly elastic, then the axial stress at each location is \(
 By comparing the formulations for the moments carried by the Euler beam in \cref{fig:EulerBending} and those of the bond-pair beam in \cref{fig:BPBending}, we see some definite parallels.
 %
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{EulerBending.eps_tex}
+\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{EulerBending.eps_tex}}
 \caption{Euler beam moment contribution}
 \label{fig:EulerBending}
 \end{figure}
 %%
 \begin{figure}[h]
+\centering
 \subinputfrom{\diagrampath}{BondPairBending_edit.eps_tex}
 \caption{Bond-pair moment contribution}
 \label{fig:BPBending}
 \end{figure}
 %
 \begin{align}
-M_\text{classical}&=\int_{-\frac{t}{2}}^{\frac{t}{2}} \sigma \; y \; dA && = \int_{-\frac{t}{2}}^{\frac{t}{2}} E \kappa \; y^2 \; b(y) dy\notag \\
+M_\text{E}&=\int_{-\frac{t}{2}}^{\frac{t}{2}} \sigma \; y \; dA &= \int_{-\frac{t}{2}}^{\frac{t}{2}} E \kappa \; y^2 \; b(y) dy\notag \\
 %
-M_\text{PD}&=\int_{-\delta}^{\delta} \vstate{T}{}{\xi}\; \xi \; d\xi & = \int_{-\delta}^{\delta} \alpha \frac{\sin(\Delta\theta)}{|\xi|} \; \xi \; \omega(\xi) d\xi\: & \approx \int_{-\delta}^{\delta} \alpha \kappa |\xi| \; \omega(\xi) d\xi\notag
+M_\text{PD}&=\int_{-\delta}^{\delta} \vstate{T}{}{\xi}\; \xi \; d\xi &\notag \\
+&= \int_{-\delta}^{\delta} \alpha \frac{\sin(\Delta\theta)}{|\xi|} \; \xi \; \omega(\xi) d\xi\: &\approx \int_{-\delta}^{\delta} \alpha \kappa |\xi| \; \omega(\xi) d\xi\notag
 \end{align}
 %
 The term \(y\) is the distance from the beam's neutral axis and \(b(y)\) is the width of the beam at that distance from the neutral axis. 
@@ -248,18 +272,17 @@ The similarity between classical and peridynamic moment formulations suggests a 
 \end{equation}
 %
 \begin{figure}[h]
-\minipage[t]{0.5\textwidth}
  \centering
   \subinputfrom{\diagrampath}{WeightProfile_Uniform.eps_tex}
 \caption{Weight function for a beam of rectangular cross-section}
 \label{fig:WeightProfileUniform}
-\endminipage\hfill
-\minipage[t]{0.5\textwidth}%
+\end{figure}
+
+\begin{figure}
   \centering
   \subinputfrom{\diagrampath}{WeightProfile_Ibeam.eps_tex}
 \caption{Weight function for an I-beam}
 \label{fig:WeightProfileIbeam}
-\endminipage
 \end{figure}
 %
 This weight function analogizes the relative contributions of bond pairs of different lengths to the relative contributions of fibers at different distances from the centerline. 
@@ -318,7 +341,8 @@ As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relat
 We can picture a bending resistance based on the bond length and the nonlocal curvature  \(\bar{\kappa}\), so that 
 %
 \begin{align}
-\alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies \notag \\
+\label{eq:NLbending}
+\alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies  \\
 W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi.\notag
 \end{align}
 %  
@@ -352,7 +376,6 @@ and the resulting strain energy
 \end{equation}
 bear a striking resemblance to \cref{eq:NLbending}.
 
-%This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
 The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
 It is therefore unsurprising that, like Eringen's nonlocal elasticity, the peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
 Instead, the advantage of peridynamic models is their natural handling of discontinuities.
@@ -366,7 +389,8 @@ Discretizing the bond-pair model is primarily matter of exchanging integrals for
 %
 \begin{align}
 %\label{eq:discreteBeamw}
-w = \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \approx \frac{\alpha}{2}\left(\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi}\right)^2 \notag
+w &= \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \notag \\
+&\approx \frac{\alpha}{2}\left(\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi}\right)^2 \notag
 \end{align}
 %
 \begin{align}
@@ -376,9 +400,10 @@ W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{v(x+\xi_i)-2v(x)+v(x-\xi_i)}{\x
 \end{align}
 %
 Discretization of the original model results in the equation of motion
-\begin{equation}
-\rho(\mathbf{x})\mathbf{\ddot{u}}(\mathbf{x}) = \mathbf{f}(\mathbf{x})+\sum_i \omega(\xi_i)\left\{\frac{\alpha(\mathbf{x})}{|\mathbf{p}_i |}\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times\left[\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \frac{\mathbf{q}_i}{|\mathbf{q}_i |}\right]-\frac{\alpha(\mathbf{x}+\boldsymbol{\xi}_i)}{|\mathbf{p}_i |}\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times\left[\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times \frac{\mathbf{r}_i}{|\mathbf{r}_i |}\right]\right\}\notag
-\end{equation}
+\begin{align}
+\rho(\mathbf{x})\mathbf{\ddot{u}}(\mathbf{x}) = \mathbf{f}(\mathbf{x})&+\sum_i \omega(\xi_i)\left\{\frac{\alpha(\mathbf{x})}{|\mathbf{p}_i |}\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \left[ \frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \frac{\mathbf{q}_i}{|\mathbf{q}_i |}\right] \right. \notag \\
+& \left. -\frac{\alpha(\mathbf{x}+\boldsymbol{\xi}_i)}{|\mathbf{p}_i |}\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times\left[\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times \frac{\mathbf{r}_i}{|\mathbf{r}_i |} \right] \right\} \notag
+\end{align}
 with
 \begin{align}
 \mathbf{p}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
@@ -386,9 +411,10 @@ with
 \mathbf{r}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+2\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i).\notag
 \end{align}
 and for small displacements and rotations in a uniform beam,
-\begin{equation}
-\rho(x)\ddot{v}(x) = f(x)+\alpha \sum_i 2\omega(\xi_i)\frac{v(x-2\xi_i)-4v(x-\xi_i)+6v(x)-4v(x+\xi_i)+v(x+2\xi_i)}{\xi_i^2}\notag
-\end{equation}
+\begin{align}
+&\rho(x)\ddot{v}(x) = f(x)+\alpha \sum_i 2\omega(\xi_i)\bigg( \notag\\
+&\left. \frac{v(x-2\xi_i)-4v(x-\xi_i)+6v(x)-4v(x+\xi_i)+v(x+2\xi_i)}{\xi_i^2}\right) \notag
+\end{align}
 Discretizing the bond-pair model as proposed above requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(x-\xi_i)\) is ill-defined. 
 For this reason, the discretization does not allow for areas of higher and lower ``resolution''. 
 %
@@ -409,7 +435,7 @@ Even a coarse discretization successfully reproduces the elastically deformed be
 
 \begin{figure}[h]
   \centering
-  \scalebox{.6}{\input{\plotpath/elastic_h20_g2000.pgf}}
+  \resizebox{\linewidth}{!}{\input{\plotpath/elastic_h20_g2000.pgf}}
   \caption{The uniform-load elastic beam is accurately modeled with few nodes}
   \label{fig:elastic_g2000}
 \end{figure}
@@ -419,7 +445,7 @@ This behavior is mimicked by the plasticity of the longest bond-pairs, producing
 To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
 \begin{figure}[h]
   \centering
-  \scalebox{.6}{\input{\plotpath/eppu_h10_g2000.pgf}}
+  \resizebox{\linewidth}{!}{\input{\plotpath/eppu_h10_g2000.pgf}}
   \caption{The elastic perfectly-plastic beam requires finer discretization}
   \label{fig:eppu_h10_g2000}
 \end{figure}
@@ -432,32 +458,17 @@ Accurate residual deformation modeling requires both a relatively small horizon 
 %
 \begin{figure}[h]
   \centering
-  \scalebox{.6}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+  \resizebox{\linewidth}{!}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
   \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
   \label{fig:ResidualPlasticityN}
 \end{figure}
 %
 \begin{figure}[h]
   \centering
-  \scalebox{.6}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+  \resizebox{\linewidth}{!}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
   \caption{Accurately modeling residual plastic deformation also requires a small horizon}
   \label{fig:ResidualPlasticityH}
 \end{figure}
-%
-%\begin{figure}[h]
-%\minipage[t]{0.5\textwidth}
-% \centering
-%  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
-%\caption{N-convergence}
-%\label{fig:ResidualPlasticityN}
-%\endminipage\hfill
-%\minipage[t]{0.5\textwidth}%
-%  \centering
-%  \scalebox{.45}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
-%\caption{H-convergence}
-%\label{fig:ResidualPlasticityH}
-%\endminipage
-%\end{figure}
 
 It is more difficult to verify the brittle material model because brittle failure is unstable.
 When a crack begins, moment is transferred to other bond pairs, and failure progresses until every pair of bonds surrounding a node are broken, creating a hinge at that node.
@@ -465,7 +476,7 @@ This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Hea
 
 \begin{figure}[h]
   \centering
-  \scalebox{.65}{\input{\plotpath/brittle_h10_n200.pgf}}
+  \resizebox{\linewidth}{!}{\input{\plotpath/brittle_h10_n200.pgf}}
   \caption{A brittle beam with prescribed center displacement}
   \label{fig:brittleBeam}
 \end{figure}
