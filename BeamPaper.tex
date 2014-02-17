@@ -21,10 +21,10 @@
 %\usepackage{autonum}
 
 
-\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+%\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
-\graphicspath{ {../} }
-\graphicspath{ {./images/} }
+\graphicspath{{../}}
+\graphicspath{{./images/}}
 \newcommand{\diagrampath}{./diagrams/}
 \newcommand{\plotpath}{./plots}
 
@@ -59,31 +59,25 @@ Simple test cases demonstrate the model's performance.
 \maketitle
 
 \section{Introduction}
-The final goal of many mechanical engineering analyses is the prediction and description of material failure.
-When processes such as fracture are modeled, the differential equations of classical mechanics are ill-defined at the resulting discontinuities.
-A peridynamic formulation of continuum mechanics casts material behavior in terms of integral functions of displacement, so that discontinuities evolve naturally and require no special treatment.
-Various peridynamic models capture the material behavior of 3-dimensional solid objects, but would be very expensive to implement for a thin plate or beam.
-Other peridynamic models capture tension and compression in 1D bars and 2D plates, but these models do not resist transverse displacement.
-A recent paper by Taylor and Steigmann \cite{taylor2013two} reduces a bond based 3D plate to two dimensions with an integral through the plate's thickness.
+A goal of many mechanical engineering analyses is the prediction and description of material failure.
+When processes such as fracture are modeled, the partial-differential equations of classical mechanics are ill-defined at the resulting discontinuities in displacement.  A peridynamic formulation of continuum mechanics casts material behavior in terms of integral functions of displacement (as opposed to gradients of displacement), so that discontinuities evolve naturally and require no special treatment.  Various peridynamic material models capture the material behavior of 3-dimensional solid objects \cite{silling2007peridynamic, silling2005meshfree, gerstle2007peridynamic}, but would be very expensive to implement for a thin plate or beam, as the thru-thickness discretization requirement to properly capture resistance to bending would cause an inordinate amount of computational nodes along the length in a long, slender structural object.  Other peridynamic models capture tension and compression in 1D bars and 2D plates, but these models do not resist transverse displacement {\color{red} [Ref]}.  A recent paper by Taylor and Steigmann \cite{taylor2013two} reduces a bond based 3D plate to two dimensions with an integral through the plate's thickness, to create a model that can represent thin structures, but fails to properly {\color{red} XXX}.
 
-This paper begins to remedy that lack in the simplest case by presenting a peridynamic equivalent to an Euler-Bernoulli beam.
-In addition to directly modeling a thin beam in bending, the simple beam case lays the theoretical framework for more complex peridynamic beam, plate, and shell bending models.
+This paper presents a peridynamic equivalent to an Euler-Bernoulli beam, along with a methodology for representing non-uniform cross-sections, plastic behavior, and failure.  In addition to directly modeling a thin beam in bending, the simple beam case lays the theoretical framework for more complex peridynamic beam, plate, and shell bending models.
 Because many analyses of interest are partly or wholly comprised of these types of features, their development is an important addition to the capabilities of peridynamic analysis.
 %
 %The second section of this paper provides a brief introduction to peridynamics, including state based models.
-%The third section presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
+%The third section presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of vanishing nonlocality.
 %The fourth section demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
 %The fifth section demonstrates the beam model with simple test cases.
-The remainder of this introduction reviews other nonlocal work and provides a brief introduction to peridynamics, including state based models.
-\Cref{sec:ModelDev} presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
-\Cref{sec:EringenCompare} demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
-\Cref{sec:Numerical} demonstrates the beam model with simple test cases.
+The remainder of this introduction reviews other nonlocal models and provides a brief introduction to peridynamics, including state-based models.
+\Cref{sec:ModelDev} presents the state-based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
+\Cref{sec:EringenCompare} demonstrates the model's relationship to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
+\Cref{sec:Numerical} numerically demonstrates the beam model with simple test cases.
 %
 \subsection{Nonlocal Beam Models}
 \label{sec:NLbeams}
 %
-Nonlocal elasticity generally allows for forces at a point that are dependent on the material configuration of an entire body, rather than the configuration at that point.\cite{eringen1972nonlocal}
-While long-range forces are obvious at the molecular model, material at larger scales is conventionally modeled as though internal forces are local or contact forces.\cite{kroner1967elasticity}
+Nonlocal elasticity generally allows for forces at a point that are dependent on the material configuration of an entire body, rather than the configuration at that point \cite{eringen1972nonlocal}.  While long-range forces are obvious at the molecular model, material at larger scales is conventionally modeled as though internal forces are local or contact forces \cite{kroner1967elasticity}.
 The result of such approximation is accurate for deformations that are homogenous, but introduces some inaccuracy for inhomogenous deformations like the propagation of waves with short wavelengths.
 One way to distinguish between homogenous and inhomogenous deformations is to incorporate higher-order gradients of deformation.
 While stress in classical elasticity is a function of the (first) gradient of deformation, Eringen's formulation of a nonlocal modulus in \cite{eringen1983differential} approximates a weighted sum of the first and second order gradients.
@@ -113,7 +107,7 @@ Constitutive modeling of a wide variety of materials is accomplished by choosing
 While the simplest force functions recreate a one-parameter linear elastic solid material\cite{silling2000reformulation}, other force functions can be used to model nonlinear elasticity, plasticity, damage, and other behaviors\cite{silling2005peridynamic}.
 To describe force functions that incorporate the behavior of all points in the nearby material (not just \(\mathbf{x}\) and \(\mathbf{q}\)), we must introduce the concept of a peridynamic state.
 
-Introduced by Silling et al. in 2007~\cite{silling2007peridynamic}, states are functions of the behavior of the continuum points surrounding each location.
+Introduced by Silling et al.\ in 2007~\cite{silling2007peridynamic}, states are functions of the behavior of the continuum points surrounding each location.
 The most common states are scalar states and vector states which are scalar and vector valued, respectively.
 Unlike multiplication by a second order tensor, which can only map vectors linearly to other vectors, vector states can produce highly nonlinear or even discontinuous mappings.
 Important properties of states are magnitude and direction, while important operations include the addition and decomposition of states, inner and tensor products, and the Fr\'{e}chet derivative of a function with respect to a state~\cite{silling2007peridynamic}.
@@ -137,8 +131,8 @@ The deformed image of the vector $\mathbf{q}-\mathbf{x}$ is defined as the \text
 Just as stress and strain are work conjugate, so too are the force and deformation vector states for hyperelastic materials.
 If the force state $\vstate{T}{}{}$ is always in the same direction as the deformation state $\vstate{Y}{}{}$, then the force exerted by a ``bond'' between points is in the same direction as the deformed bond, and the model is called \textit{ordinary}.  
 Models in which they are not in the same direction are called \textit{non-ordinary}.
-Silling et al. demonstrate the possibility of such models in \cite{silling2010peridynamic}, but very little work has touched on their use.
-Foster et al. \cite{foster2010viscoplasticity} and Warren et. al. \cite{warren2009non} show that correspondence models, which approximate the deformation gradient and use it to calculate bond forces, result in non-ordinary state based constitutive models for deformation with large rotation.
+Silling et al.\ demonstrate the possibility of such models in \cite{silling2010peridynamic}, but very little work has touched on their use.
+Foster et al.\ \cite{foster2010viscoplasticity} and Warren et al.\ \cite{warren2009non} show that correspondence models, which approximate the deformation gradient and use it to calculate bond forces, result in non-ordinary state based constitutive models for deformation with large rotation.
 %
 \FloatBarrier
 %
@@ -174,7 +168,7 @@ Other choices for the bond-pair potential function, such as \( w = (\pi - \theta
 \subsection{Energy Equivalence}
 \label{sec:EnergyEq}
 %
-To determine an appropriate choice of $\alpha$, we desire our peridynamic model to have an equivalent strain energy density to a classical Euler-Bernoulli beam in the \emph{local limit}, i.e. when the nonlocal length scale vanishes.  We will begin with the assumptions from Euler beam theory: the length of the beam is much greater than thickness, vertical displacements are small, and rotations are small. For small vertical displacments we have
+To determine an appropriate choice of $\alpha$, we desire our peridynamic model to have an equivalent strain energy density to a classical Euler-Bernoulli beam in the \emph{local limit}, i.e.\ when the nonlocal length scale vanishes.  We will begin with the assumptions from Euler beam theory: the length of the beam is much greater than thickness, vertical displacements are small, and rotations are small. For small vertical displacments we have
 %
 \begin{equation}
 \theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}) \approx \pi-\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi},
@@ -223,7 +217,7 @@ with
 \subsection{Weighting Function and Perfect Plasticity}
 \label{sec:WeightFunction}
 The weighting function \(\omega(\xi)\) describes the relative contribution of each bond-pair, and can be defined according to physical or mathematical considerations. 
-Consider an Euler beam in bending with curvature \(\kappa\). 
+Consider a classical Euler-Bernoulli beam in bending with curvature \(\kappa\). 
 Fibers running parallel to the neutral axis of the beam are stretched in proportion to their distance from the neutral axis, with strain \(\epsilon = y\kappa\). 
 If the fibers are linearly elastic, then the axial stress at each location is \(\sigma = E\epsilon = Ey\kappa\), and the contribution to supported moment \(dM = \kappa E y^2 dA\). 
 By comparing the formulations for the moments carried by the Euler beam in \cref{fig:EulerBending} and those of the bond-pair beam in \cref{fig:BPBending}, we see some definite parallels.
@@ -308,7 +302,7 @@ and for the strain energy (again substituting \(\kappa = v''\) for readability),
 %
 \begin{equation}
 %W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{\xi^4}{24}\kappa^4+\mathcal{O}(\xi^6)) d\xi .\notag
-W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{3\; \xi^4}{8}\kappa^4+\mathcal{O}(\xi^6)) d\xi .\notag
+W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{\xi^4}{12}\kappa\kappa''-\frac{3\; \xi^4}{8}\kappa^4+\mathcal{O}(\xi^6)) d\xi.\notag
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
@@ -316,7 +310,7 @@ We can picture a bending resistance based on the nonlocal curvature  \(\bar{\kap
 %
 \begin{align}
 \alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies \notag \\
-W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
+W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi.\notag
 \end{align}
 %  
 The same analysis can be taken further to obtain higher-order energy terms with even powers of \(\xi\) and even order derivatives of \(\kappa\). 
