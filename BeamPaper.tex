@@ -69,10 +69,10 @@ Because many analyses of interest are partly or wholly comprised of these types 
 %The third section presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of vanishing nonlocality.
 %The fourth section demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
 %The fifth section demonstrates the beam model with simple test cases.
-The remainder of this introduction reviews other nonlocal models and provides a brief introduction to peridynamics, including state-based models.
-\Cref{sec:ModelDev} presents the state-based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
-\Cref{sec:EringenCompare} demonstrates the model's relationship to Eringen's nonlocal elasticity for small peridynamic horizons, and compares other gradient models.
-\Cref{sec:Numerical} numerically demonstrates the beam model with simple test cases.
+The remainder of this introduction reviews other nonlocal work and provides a brief introduction to peridynamics, including state based models.
+\Cref{sec:ModelDev} presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
+\Cref{sec:EringenCompare} demonstrates the model's equivalence to Eringen's nonlocal elasticity for small peridynamic horizons.
+\Cref{sec:Numerical} demonstrates the beam model with simple test cases.
 %
 \subsection{Nonlocal Beam Models}
 \label{sec:NLbeams}
@@ -229,7 +229,7 @@ By comparing the formulations for the moments carried by the Euler beam in \cref
 \end{figure}
 %%
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{BondPairBending.eps_tex}
+\subinputfrom{\diagrampath}{BondPairBending_edit.eps_tex}
 \caption{Bond-pair moment contribution}
 \label{fig:BPBending}
 \end{figure}
@@ -248,14 +248,23 @@ The similarity between classical and peridynamic moment formulations suggests a 
 \end{equation}
 %
 \begin{figure}[h]
-\subinputfrom{\diagrampath}{WeightProfile.eps_tex}
-\caption{A cross-section dependent weight function}
-\label{fig:WeightProfile}
+\minipage[t]{0.5\textwidth}
+ \centering
+  \subinputfrom{\diagrampath}{WeightProfile_Uniform.eps_tex}
+\caption{Weight function for a beam of rectangular cross-section}
+\label{fig:WeightProfileUniform}
+\endminipage\hfill
+\minipage[t]{0.5\textwidth}%
+  \centering
+  \subinputfrom{\diagrampath}{WeightProfile_Ibeam.eps_tex}
+\caption{Weight function for an I-beam}
+\label{fig:WeightProfileIbeam}
+\endminipage
 \end{figure}
 %
 This weight function analogizes the relative contributions of bond pairs of different lengths to the relative contributions of fibers at different distances from the centerline. 
-An example is shown in \cref{fig:WeightProfile}.
-While this weighting function offers no advantages over a uniform weight function in the case of the linearly elastic beam, it offers a way to model advancing plasticity.
+Examples are shown in \cref{fig:WeightProfileUniform,fig:WeightProfileIbeam}.
+    While this weighting function offers no advantages over a uniform weight function in the case of the linearly elastic beam, it offers a way to model advancing plasticity.
 
 In a bent Elastic Perfectly Plastic beam, axial fibers are still stretched in proportion to their distance from the neutral axis, but the relationship \(\sigma = E\epsilon = Ey\kappa\) only holds for \(|\epsilon| = |y\kappa| < \epsilon_c\). 
 For greater stretches, the relationship becomes \(\sigma = \pm E\epsilon_c \). 
@@ -306,7 +315,7 @@ W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
-We can picture a bending resistance based on the nonlocal curvature  \(\bar{\kappa}\), so that 
+We can picture a bending resistance based on the bond length and the nonlocal curvature  \(\bar{\kappa}\), so that 
 %
 \begin{align}
 \alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies \notag \\
@@ -316,23 +325,37 @@ W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\ka
 The same analysis can be taken further to obtain higher-order energy terms with even powers of \(\xi\) and even order derivatives of \(\kappa\). 
 Not all of these higher-order terms can be separated into the product of a local curvature and nonlocal bending resistance.
 
-Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material.
+Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus (denoted here as \(K(|\mathbf{x}'-\mathbf{x}|,\tau)\)) that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material through the integral
 \begin{equation}
-\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}')\notag
+\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}').\notag
 \end{equation}
 In the local limit these relationships take the form of higher-order gradients.
-Using a modified bessel function (second kind) nonlocal modulus results in a relationship between \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) 
+Using a 1-dimensional decaying exponential nonlocal modulus \(K(|x|,\tau)=\frac{1}{l\tau}e^{-\frac{|x|}{l\tau}}\)results in a relationship between \(t\) and \(\sigma\) 
 \begin{align}
-\left(1-\tau^2l^2\nabla^2\right)\mathbf{t}&=\boldsymbol{\sigma},\notag
+\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)t&=\sigma,\notag
 \end{align}
 in which \(\tau^2l^2\) is a scale-based material parameter.
-For well-behaved \(\mathbf{t}\) and \(\boldsymbol{\sigma}\) and small values of \(\tau^2l^2\) we can see that this relationship could be reformulated as
+For well-behaved \(t\) and \(\sigma\) and small values of \(\sigma''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
 \begin{equation}
-\mathbf{t}=\left(1+\tau^2l^2\nabla^2\right)\boldsymbol{\sigma}.\notag
+\label{eq:NLstress}
+t=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\sigma.\notag
 \end{equation}
+If we consider the results of the previous section and let \(dM = y\sigma dA\) and \(\sigma = Ey\kappa\), the contribution to moment resulting from Eringen's nonlocal elasticity in a fiber at \(y\)
+\begin{equation}
+\label{eq:EringenMoment}
+E y^2 (\kappa+\tau^2l^2\kappa''), \\
+\end{equation}
+and the resulting strain energy
+\begin{equation}
+\label{eq:EringenEnergy}
+\int_{-\frac{t}{2}}^{\frac{t}{2}} b(y) E \frac{y^2}{2} \kappa (\kappa+\tau^2l^2\kappa'')  dy,\notag
+\end{equation}
+bear a striking resemblance to \cref{eq:NLbending}.
 
 %This is consistent with Eringen's observation of nonlocal modulus as Green's function of a linear differential operator in~\cite{eringen1983differential}. 
-The similarity is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
+The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
+It is therefore unsurprising that, like Eringen's nonlocal elasticity, the peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
+Instead, the advantage of peridynamic models is their natural handling of discontinuities.
 
 \section{Numerical Simulation}
 \label{sec:Numerical}
@@ -382,13 +405,13 @@ Deformations for quasistatic loading were computed by implicitly solving the zer
 The simplest test case for this model is a linear-elastic beam with a square profile.
 The models below were constrained to purely vertical movement of each point in order to reduce the total number of degrees of freedom, speeding evaluation and improving convergence.
 For comparison, equivalent models are created and analyzed in Abaqus 6.12 to verify simple cases.
-Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:eppt_g100}.
+Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:elastic_g2000}.
 
 \begin{figure}[h]
   \centering
-  \scalebox{.55}{\input{\plotpath/elastic_h20_g2000.pgf}}
+  \scalebox{.6}{\input{\plotpath/elastic_h20_g2000.pgf}}
   \caption{The uniform-load elastic beam is accurately modeled with few nodes}
-  \label{fig:eppt_g100}
+  \label{fig:elastic_g2000}
 \end{figure}
 
 As an elastic-perfectly-plastic beam exceeds the elastic limit of its material, plastic zones begin to grow on the top and bottom of the beam's cross section.
@@ -396,30 +419,48 @@ This behavior is mimicked by the plasticity of the longest bond-pairs, producing
 To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
 \begin{figure}[h]
   \centering
-  \scalebox{.55}{\input{\plotpath/eppu_h10_g2000.pgf}}
+  \scalebox{.6}{\input{\plotpath/eppu_h10_g2000.pgf}}
   \caption{The elastic perfectly-plastic beam requires finer discretization}
   \label{fig:eppu_h10_g2000}
 \end{figure}
 
 A material that is plastically deformed does not return to its original state when unloaded.
 For a beam in bending, the residual deformations can be seen in a beam that has been loaded beyond the onset of plastic deformation and then unloaded.
-This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticity}. 
+This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticityN,fig:ResidualPlasticityH}. 
 Accurate residual deformation modeling requires both a relatively small horizon and a fairly large number of nodes.
 
-
+%
 \begin{figure}[h]
-\minipage{0.45\textwidth}
-  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000.pgf}}
-\endminipage\hfill
-\minipage{0.45\textwidth}%
-  \scalebox{.45}{\input{\plotpath/unloaded_n1000_g2000.pgf}}
-\endminipage
-\caption{Residual plastic deformation in an unloaded beam}
-\label{fig:ResidualPlasticity}
+  \centering
+  \scalebox{.6}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+  \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
+  \label{fig:ResidualPlasticityN}
 \end{figure}
+%
+\begin{figure}[h]
+  \centering
+  \scalebox{.6}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+  \caption{Accurately modeling residual plastic deformation also requires a small horizon}
+  \label{fig:ResidualPlasticityH}
+\end{figure}
+%
+%\begin{figure}[h]
+%\minipage[t]{0.5\textwidth}
+% \centering
+%  \scalebox{.45}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+%\caption{N-convergence}
+%\label{fig:ResidualPlasticityN}
+%\endminipage\hfill
+%\minipage[t]{0.5\textwidth}%
+%  \centering
+%  \scalebox{.45}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+%\caption{H-convergence}
+%\label{fig:ResidualPlasticityH}
+%\endminipage
+%\end{figure}
 
 It is more difficult to verify the brittle material model because brittle failure is unstable.
-When a crack begins, moment is transferred to other bond pairs, and failure progresses creating a plastic hinge.
+When a crack begins, moment is transferred to other bond pairs, and failure progresses until every pair of bonds surrounding a node are broken, creating a hinge at that node.
 This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Health'' represents the fraction of bond-pairs about each node that have not failed.
 
 \begin{figure}[h]
