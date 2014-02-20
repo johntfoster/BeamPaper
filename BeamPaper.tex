@@ -8,6 +8,7 @@
 \usepackage{epsfig}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{epstopdf}
 \usepackage{etoolbox}
 \usepackage{tikz}
@@ -273,7 +274,8 @@ The term \(y\) is the distance from the beam's neutral axis and \(b(y)\) is the 
 The similarity between classical and peridynamic moment formulations suggests a possible formulation for the weighting function:
 %
 \begin{equation}
-\omega(\xi) = |\xi| b\left(y\right) \quad \text{at} \quad y=\frac{\xi}{\delta} \frac{t}{2}\notag
+\label{eq:WeightFunction}
+\omega(\xi) = |\xi| b\left(y\right) \quad \text{at} \quad y=\frac{\xi}{\delta} \frac{t}{2}
 \end{equation}
 %
 \begin{figure}[h]
@@ -291,7 +293,26 @@ The similarity between classical and peridynamic moment formulations suggests a 
 \end{figure}
 %
 This weight function analogizes the relative contributions of bond pairs of different lengths to the relative contributions of fibers at different distances from the centerline. 
-Examples are shown in \cref{fig:WeightProfileUniform,fig:WeightProfileIbeam}.
+An example for a rectangular beam is illustrated in \cref{fig:WeightProfileUniform}.
+For an I beam with height \(h_\text{beam}\), width \(w_\text{beam}\), web height \(h_\text{web}\), and web width \(w_\text{web}\), substituting the beam profile
+\begin{equation}
+b(y) = 
+  \begin{dcases}
+    w_\text{web} & \text{if } |y| \leq \frac{h_\text{web}}{2} \\
+    w_\text{beam} & \text{if } \frac{h_\text{web}}{2} < |y| \leq \frac{h_\text{beam}}{2} \\
+    0 &\text{otherwise}
+  \end{dcases}\notag
+\end{equation}
+into \cref{eq:WeightFunction} gives the weight function
+\begin{equation}
+\omega(\xi) = 
+  \begin{dcases}
+    w_\text{web} & \text{if } |\xi| \leq \delta\frac{h_\text{web}}{h_\text{beam}} \\
+    w_\text{beam} & \text{if } \delta\frac{h_\text{web}}{h_\text{beam}} < |\xi| \leq \delta \\
+    0 &\text{otherwise}
+  \end{dcases}\notag
+\end{equation}
+and is ilustrated in \cref{fig:WeightProfileIbeam}.
     While this weighting function offers no advantages over a uniform weight function in the case of the linearly elastic beam, it offers a way to model advancing plasticity.
 
 In a deformed elastic perfectly-plastic beam, axial fibers are still stretched in proportion to their distance from the neutral axis, but the relationship \(\sigma = E\epsilon = Ey\kappa\) only holds for \(|\epsilon| = |y\kappa| < \epsilon_c\). 
@@ -343,12 +364,17 @@ W \approx \int_{-\delta}^\delta \omega(\xi)\alpha(\frac{\xi^2}{2}\kappa^2+\frac{
 \end{equation}
 %
 As the horizon \(\delta\) becomes small, higher-order \(\xi\) terms become relatively less important, and \(\xi^4\kappa^4\) is dominated by \(\xi^2\kappa^2\) for large \(\kappa\) and by \(\xi^4\kappa\kappa''\) for small \(\kappa\).
-We can picture a bending resistance based on the bond length and the nonlocal curvature  \(\bar{\kappa}\), so that 
+The remaining terms can be rearranged,
+\begin{align}
+W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa(\kappa + \frac{\xi^2}{6}\kappa'') d\xi, \notag
+\end{align}
+in a manner strongly suggesting an alternative bending resistance term.
+We can picture a bending resistance based on the bond length and proportional to the nonlocal curvature  \(\bar{\kappa}=(\kappa + \frac{\xi^2}{6}\kappa'')\), so that 
 %
 \begin{align}
 \label{eq:NLbending}
-\alpha\bar{\kappa}&= \alpha(\kappa + \frac{\xi^2}{6}\kappa'') \implies  \\
-W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi.\notag
+\bar{\kappa}&=(\kappa + \frac{\xi^2}{6}\kappa'') \implies  \\
+W &\approx \int_{-\delta}^\delta \omega(\xi)\alpha \frac{\xi^2}{2}\kappa\bar{\kappa}d\xi .\notag
 \end{align}
 %  
 The same analysis can be taken further to obtain higher-order energy terms with even powers of \(\xi\) and even order derivatives of \(\kappa\). 
@@ -380,6 +406,16 @@ and the resulting strain energy
 \int_{-\frac{t}{2}}^{\frac{t}{2}} b(y) E \frac{y^2}{2} \kappa (\kappa+\tau^2l^2\kappa'')  dy,\notag
 \end{equation}
 bear a striking resemblance to \cref{eq:NLbending}.
+In fact, by carefully choosing peridynamic parameter values, the results can be made identical.
+For a rectangular beam of width \(b\) and thickness \(t\), choosing 
+\begin{equation}
+\omega(\xi) = |\xi|b ;\qquad \delta = \tau l \sqrt{3} ;\qquad \alpha = \frac{E b t^3}{54 \tau^4 l^4}\notag
+\end{equation}
+results in
+\begin{equation}
+W \approx E b \frac{t^3}{12} \frac{\kappa}{2}(\kappa+\tau^2 l^2 \kappa''), \notag
+\end{equation}
+the same result for both models.
 
 The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
 It is therefore unsurprising that, like Eringen's nonlocal elasticity, the peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
@@ -389,7 +425,6 @@ Instead, the advantage of peridynamic models is their natural handling of discon
 \label{sec:Numerical}
 \subsection{Discretized Model}
 \label{sec:Discretized}
-For analysis purposes, it is often useful to represent a continuum part with a discrete version. 
 Discretizing the bond-pair model is primarily matter of exchanging integrals for sums. 
 %
 \begin{align}
@@ -420,21 +455,21 @@ and for small displacements and rotations in a uniform beam,
 &\rho(x)\ddot{v}(x) = f(x)+\alpha \sum_i 2\omega(\xi_i)\bigg( \notag\\
 &\left. \frac{v(x-2\xi_i)-4v(x-\xi_i)+6v(x)-4v(x+\xi_i)+v(x+2\xi_i)}{\xi_i^2}\right) \notag
 \end{align}
-Discretizing the bond-pair model as proposed above requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(x-\xi_i)\) is ill-defined. 
+It is worth noting the similarity between this expression and a finite-difference fourth derivative of displacement, a result expected from Euler beam theory.
+This discretization requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(x-\xi_i)\) is ill-defined. 
 For this reason, the discretization does not allow for areas of higher and lower ``resolution''. 
 %
 \subsection{Numerical Method}
 \label{sec:NumMethod}
-Model behavior was evaluated by implementing the discretized equation of motion.
-The case of a beam simply supported at both ends was chosen for simplicity in both evaluation and comparison.
+Model behavior is evaluated by implementing the discretized equation of motion.
+The case of a beam simply supported at both ends is chosen for simplicity in both evaluation and comparison.
 Boundary conditions such as clamped supports and applied moments require careful treatment to ensure both meaningful results and ease of computation.
 
-Deformations for quasistatic loading were computed by implicitly solving the zero-acceleration discrete equation of motion with a Newton's Method solver.
+Deformations for quasistatic loading are computed by implicitly solving the zero-acceleration discrete equation of motion with a Newton's Method solver.
 %
 \subsection{Results}
 \label{sec:Results}
 The simplest test case for this model is a linear-elastic beam with a square profile.
-The models below were constrained to purely vertical movement of each point in order to reduce the total number of degrees of freedom, speeding evaluation and improving convergence.
 For comparison, equivalent models are created and analyzed in Abaqus 6.12 to verify simple cases.
 Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:elastic_g2000}.
 
