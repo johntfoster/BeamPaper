@@ -1,4 +1,5 @@
-\documentclass[5p,twocolumn]{elsarticle}
+%\documentclass[5p,twocolumn]{elsarticle}
+\documentclass[preprint,review,12pt]{elsarticle}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
@@ -70,7 +71,7 @@ Simple test cases demonstrate the model's performance.
 \end{abstract}
 
 \begin{keyword}
-Peridynamics \sep non-ordinary models
+peridynamics \sep non-ordinary model \sep non-local model
 \end{keyword}
 
 \end{frontmatter}
@@ -165,7 +166,7 @@ Consider the material model illustrated in \cref{fig:SimpleBondpair} in which ev
 %
 \begin{figure}[h]
 \centering
-\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{simpleBondPair.eps_tex}}
+\resizebox{0.6\linewidth}{!}{\subinputfrom{\diagrampath}{simpleBondPair.eps_tex}}
 \caption{Illustration of a bond pair model that resists angular deformation}
 \label{fig:SimpleBondpair}
 \end{figure}
@@ -182,7 +183,7 @@ The force magnitude is proportional to the sine of the angle between the bonds d
 %
 \begin{figure}[h]
 \centering
-\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{bondPair.eps_tex}}
+\resizebox{0.6\linewidth}{!}{\subinputfrom{\diagrampath}{bondPair.eps_tex}}
 \caption{Deformation and force vector states}
 \label{fig:Bondpair}
 \end{figure}
@@ -251,7 +252,8 @@ If the fibers are linearly elastic, then the axial stress at each location is \(
 By comparing the formulations for the moments carried by the Euler beam in \cref{fig:EulerBending} and those of the bond-pair beam in \cref{fig:BPBending}, we see some definite parallels.
 %
 \begin{figure}[h]
-\resizebox{\linewidth}{!}{\subinputfrom{\diagrampath}{EulerBending.eps_tex}}
+\centering
+\resizebox{0.5\linewidth}{!}{\subinputfrom{\diagrampath}{EulerBending.eps_tex}}
 \caption{Euler beam moment contribution}
 \label{fig:EulerBending}
 \end{figure}
@@ -418,7 +420,7 @@ W \approx E b \frac{t^3}{12} \frac{\kappa}{2}(\kappa+\tau^2 l^2 \kappa''), \nota
 the same result for both models.
 
 The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; Eringen's gradient elasticity is the solution to the integral formulation of the nonlocal stress integral equation just as the peridynamic energy is an integral function of nonlocal displacements.
-It is therefore unsurprising that, like Eringen's nonlocal elasticity, the peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
+It is therefore unsurprising that, like Eringen's nonlocal elasticity\cite{Challamel2008small}, this peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
 Instead, the advantage of peridynamic models is their natural handling of discontinuities.
 
 \section{Numerical Simulation}
@@ -475,7 +477,7 @@ Even a coarse discretization successfully reproduces the elastically deformed be
 
 \begin{figure}[h]
   \centering
-  \resizebox{\linewidth}{!}{\input{\plotpath/elastic_h20_g2000.pgf}}
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/elastic_h20_g2000.pgf}}
   \caption{The uniform-load elastic beam is accurately modeled with few nodes}
   \label{fig:elastic_g2000}
 \end{figure}
@@ -485,7 +487,7 @@ This behavior is mimicked by the plasticity of the longest bond-pairs, producing
 To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
 \begin{figure}[h]
   \centering
-  \resizebox{\linewidth}{!}{\input{\plotpath/eppu_h10_g2000.pgf}}
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/eppu_h10_g2000.pgf}}
   \caption{The elastic perfectly-plastic beam requires finer discretization}
   \label{fig:eppu_h10_g2000}
 \end{figure}
@@ -498,14 +500,14 @@ Accurate residual deformation modeling requires both a relatively small horizon 
 %
 \begin{figure}[h]
   \centering
-  \resizebox{\linewidth}{!}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
   \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
   \label{fig:ResidualPlasticityN}
 \end{figure}
 %
 \begin{figure}[h]
   \centering
-  \resizebox{\linewidth}{!}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
   \caption{Accurately modeling residual plastic deformation also requires a small horizon}
   \label{fig:ResidualPlasticityH}
 \end{figure}
@@ -516,7 +518,7 @@ This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Hea
 
 \begin{figure}[h]
   \centering
-  \resizebox{\linewidth}{!}{\input{\plotpath/brittle_h10_n200.pgf}}
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/brittle_h10_n200.pgf}}
   \caption{A brittle beam with prescribed center displacement}
   \label{fig:brittleBeam}
 \end{figure}
