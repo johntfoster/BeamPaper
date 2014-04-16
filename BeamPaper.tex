@@ -18,6 +18,7 @@
 \usepackage{xfrac}
 \usepackage{import}
 \usepackage[section]{placeins}
+\usepackage[inline]{trackchanges}
 
 \usepackage{cleveref}
 %\usepackage{autonum}
@@ -77,10 +78,10 @@ peridynamics \sep non-ordinary model \sep non-local model
 \end{frontmatter}
 
 \section{Introduction}
-A goal of many mechanical engineering analyses is the prediction and description of material failure.
+\note{Re: Rev. I, Comment 3}\change{A goal of many mechanical engineering analyses is the prediction and description of material failure.}{James, this is just an example of how to use trackchanges, please remove this comment}
 When processes such as fracture are modeled, the partial-differential equations of classical mechanics are ill-defined at the resulting discontinuities in displacement.  
 A peridynamic formulation of continuum mechanics casts material behavior in terms of integral functions of displacement (as opposed to gradients of displacement), so that discontinuities can evolve naturally and require no special treatment.  
-Various peridynamic material models capture the deformation behavior of 3-dimensional solid objects \cite{silling2007peridynamic, silling2005meshfree, gerstle2007peridynamic}, but would be very expensive to implement for a thin plate or beam, as the thru-thickness discretization requirement to properly capture resistance to bending would be prohibitively expensive in a computational setting for a long, slender structural object.  
+Various peridynamic material models capture the deformation \note{Another example, you have to go around citations} \change{behavior of 3-dimensional solid objects}{You have to stop short of citations} \cite{silling2007peridynamic, silling2005meshfree, gerstle2007peridynamic}, \add{and start more after} but would be very expensive to implement for a thin plate or beam, as the thru-thickness discretization requirement to properly capture resistance to bending would be prohibitively expensive in a computational setting for a long, slender structural object.  
 Other peridynamic models capture tension and compression in 1D bars\cite{silling2003deformation} and 2D membranes\cite{silling2005peridynamic}, but these features do not resist transverse displacement.  
 A recent paper by Taylor and Steigmann \cite{taylor2013two} reduces a bond based 3D plate to two dimensions with an integral through the plate's thickness. 
 This creates a model that can represent thin structures and includes a bending term, but is used to simulate tension loading. 
