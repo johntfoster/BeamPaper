@@ -35,8 +35,10 @@ To sync your local repo with `origin master` on github:
 git pull
 ````
 
-### To build the paper ###
-Make sure you have a current LaTeX installation in your `$PATH`, then just
-type `make`.  The included `Makefile` will correctly typeset and update
-references, cross-references, bibliography, etc. You can also type `make clean`
-to remove all the auxiliary files in the directory.
+### Creating a $\LaTeX$ Diff from the repository
+
+```
+latexdiff-vc -r 207e8e9 --math-markup=0 BeamPaper.tex
+````
+
+where `207e8e9` should be replaced with the correct `git` commit.
