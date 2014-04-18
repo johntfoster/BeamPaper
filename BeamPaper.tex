@@ -13,13 +13,13 @@
 \usepackage{epstopdf}
 \usepackage{etoolbox}
 \usepackage{tikz}
-\usepackage{caption}
-\usepackage{subcaption}
+%\usepackage{caption}
+%\usepackage{subcaption}
 \usepackage{xfrac}
 \usepackage{import}
 \usepackage[section]{placeins}
 \usepackage[inline]{trackchanges}
-
+\usepackage{morefloats}
 \usepackage{cleveref}
 %\usepackage{autonum}
 
@@ -37,6 +37,12 @@
 	\mathbf{\underline{#1}}%
 	\ifstrempty{#2}{}{[#2]}%
 	\ifstrempty{#3}{}{\langle #3 \rangle}}
+
+\newcommand\tvstate[3]{%
+	\mathbf{\underline{#1}\vphantom{\hat{\underline{#1}}}}%
+	\ifstrempty{#2}{}{[#2]}%
+	\ifstrempty{#3}{}{\langle #3 \rangle}}
+
 \newcommand\sstate[3]{%
 	\mathit{\underline{#1}}%
 	\ifstrempty{#2}{}{[#2]}%
@@ -72,23 +78,24 @@ Simple test cases demonstrate the model's performance.
 \end{abstract}
 
 \begin{keyword}
-peridynamics \sep non-ordinary model \sep non-local model
+peridynamics \sep non-ordinary model \sep non-local model \sep non-local beam
 \end{keyword}
 
 \end{frontmatter}
 
 \section{Introduction}
-\note{Re: Rev. I, Comment 3}\change{A goal of many mechanical engineering analyses is the prediction and description of material failure.}{James, this is just an example of how to use trackchanges, please remove this comment}
+A goal of many mechanical engineering analyses is the prediction and description of material failure.
 When processes such as fracture are modeled, the partial-differential equations of classical mechanics are ill-defined at the resulting discontinuities in displacement.  
 A peridynamic formulation of continuum mechanics casts material behavior in terms of integral functions of displacement (as opposed to gradients of displacement), so that discontinuities can evolve naturally and require no special treatment.  
-Various peridynamic material models capture the deformation \note{Another example, you have to go around citations} \change{behavior of 3-dimensional solid objects}{You have to stop short of citations} \cite{silling2007peridynamic, silling2005meshfree, gerstle2007peridynamic}, \add{and start more after} but would be very expensive to implement for a thin plate or beam, as the thru-thickness discretization requirement to properly capture resistance to bending would be prohibitively expensive in a computational setting for a long, slender structural object.  
+Various peridynamic material models capture the deformation behavior of 3-dimensional solid objects \cite{silling2007peridynamic, silling2005meshfree, gerstle2007peridynamic}, but would be very expensive to implement for a thin plate or beam, as the thru-thickness discretization requirement to properly capture resistance to bending would be prohibitively expensive in a computational setting for a long, slender structural object.  
 Other peridynamic models capture tension and compression in 1D bars\cite{silling2003deformation} and 2D membranes\cite{silling2005peridynamic}, but these features do not resist transverse displacement.  
 A recent paper by Taylor and Steigmann \cite{taylor2013two} reduces a bond based 3D plate to two dimensions with an integral through the plate's thickness. 
 This creates a model that can represent thin structures and includes a bending term, but is used to simulate tension loading. 
 The model is limited to the 3D bond-based Poisson ratio \(\nu=\sfrac{1}{4}\), though the same technique could be applied to a state-based model at the expense of complexity.
 
-This paper presents a peridynamic equivalent to an Euler-Bernoulli beam, along with a methodology for representing non-uniform cross-sections, plastic behavior, and failure.  
-This model is not derived from prior ordinary peridynamic models based on bond extension, but directly resists bending deformation.
+This paper presents a peridynamic equivalent to an Euler-Bernoulli beam, along with a methodology for representing non-uniform cross-sections, plastic behavior, and failure.
+\note{Re: Rev 2, Comm 1}
+\add{Unlike many continuum beam theories that derive new equations of motion (such as fourth order PDE's) from the 3D elastic constitutive model, the new}\remove{This} model is not derived from prior ordinary peridynamic models based on bond extension, but \add{is a material model that }directly resists bending deformation \add{while maintaining the same conservation of momentum equation as the 3D model}.
 In addition to directly modeling a beam in bending, the simple beam case lays the theoretical framework for more complex peridynamic beam, plate, and shell bending models.
 Because many analyses of interest are partly or wholly comprised of these types of features, their development is an important addition to the capabilities of peridynamic analysis.
 %
@@ -98,8 +105,8 @@ Because many analyses of interest are partly or wholly comprised of these types 
 %The fifth section demonstrates the beam model with simple test cases.
 The remainder of this introduction reviews other nonlocal work and provides a brief introduction to peridynamics, including state based models.
 \Cref{sec:ModelDev} presents the state based beam model and demonstrates equivalence to classical Euler-Bernoulli beam theory in the limit of shrinking nonlocality.
-\Cref{sec:EringenCompare} demonstrates the model's relationship to Eringen's nonlocal elasticity for small peridynamic horizons.
 \Cref{sec:Numerical} demonstrates the beam model with simple numerical examples.
+\ref{sec:EringenCompare} demonstrates the model's relationship to Eringen's nonlocal elasticity for small peridynamic horizons.
 %
 \subsection{Nonlocal Beam Models}
 \label{sec:NLbeams}
@@ -114,11 +121,13 @@ Previous work in the nonlocal mechanics of beams is motivated by the observed st
 Challamel and Wang demonstrate in \cite{Challamel2008small} that Eringen nonlocal elasticity cannot reproduce the scale stiffening, but that stiffening does result from other gradient-elastic models and models incorporating nonlocal curvature.
 Because all of these models incorporate higher-order gradients of deformation, they impose stronger continuity requirements than classical elasticity, and are unsuitable for discontinuous displacements.
 Because the gradients are evaluated locally, gradient models are called \textit{weakly nonlocal}.
+\note{Re: Rev 1, Comm 1}\add{Recent work by Paolo et al.}\cite{paola2013mechanically}\add{develops a displacement-based beam in which relative axial displacement, shear displacement, and rotation of non-adjacent beam segments are resisted by three kinds of nonlocal spring, whose stiffnesses can be tuned to the expected material behavior.
+With the appropriate nonlocal stiffnesses, their model reproduces the nanoscale cantilever stiffening effect.}
 
 %
 \subsection{Peridynamics}
 \label{sec:PDintro}
-The term \textit{peridynamic} was coined by Silling in \cite{silling2000reformulation} and alludes to the fact that the force at a point is affected by nearby material configuration.
+The term \textit{peridynamic} \note{Re: Rev 1, Comm 3} \remove{was coined by Silling in [] and} alludes to the fact that the force at a point is affected by nearby material configuration\change{.}{ and was coined by Silling to describe the new formulation of continuum mechanics he developed in } \cite{silling2000reformulation}
 In contrast to gradient models, the peridynamic model is \textit{strongly nonlocal} and casts material behavior at a point as the \textit{integral equation} 
 %
 \begin{equation}
@@ -146,7 +155,7 @@ Conservation of linear momentum in the \textit{state-based} peridynamic formulat
 \end{equation}
 %
 in which $\vstate{T}{\;}{\;}$ is a \textit{force vector-state} that maps the vector in angle brackets, $\langle \rangle$, originating at the point in square brackets, [ ], to a force vector acting on that point.
-The deformed image of the vector $\mathbf{q-x}$) is defined as the \textit{deformation vector-state}, usually denoted $\vstate{Y}{}{}$ and formulated as shown in \cref{eq:PDdeformation}. 
+The deformed image of the vector $(\mathbf{q-x})$ is defined as the \textit{deformation vector-state}, usually denoted $\vstate{Y}{}{}$ and formulated as shown in \cref{eq:PDdeformation} \note{Re: Rev 2, Comm 2}\add{for a displacement field} \(\mathbf{u}\). 
 %
 \begin{equation}
 \label{eq:PDdeformation}
@@ -172,12 +181,14 @@ Consider the material model illustrated in \cref{fig:SimpleBondpair} in which ev
 \label{fig:SimpleBondpair}
 \end{figure}
 %
-If we call the deformed angle between these bonds \(\theta\), and choose the potential energy of that spring to be \( w = \alpha [1 + \cos(\theta) ] \), we can recover the non-ordinary force state proposed by Silling in \cite{silling2007peridynamic}.
+If we call the deformed angle between these bonds \(\theta\), and choose the potential energy of that spring to be \note{Re: Rev 1, Comm 4\&5}\(w(\boldsymbol{\xi}) = \omega(\boldsymbol{\xi})\alpha [1 + \cos(\theta) ] \)\add{for the bond pair $\boldsymbol{\xi}$ and $-\boldsymbol{\xi}$, we can recover the non-ordinary force state proposed by Silling in }\cite{silling2007peridynamic} \add{by taking the Fr\'echet derivative. For the derivation and a description of the Fr\'echet derivative see} \ref{sec:frechet}.
 %
-\begin{equation}
+\begin{align}
 \label{eq:SillingForceNO}
-\vstate{T}{}{\boldsymbol{\xi}} =\frac{-\alpha}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \frac{\vstate{Y}{}{\boldsymbol{\xi}}}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \times \left[\frac{\vstate{Y}{}{\boldsymbol{\xi}}}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \times \frac{\vstate{Y}{}{-\boldsymbol{\xi}}}{|\vstate{Y}{}{-\boldsymbol{\xi}}|}\right]
-\end{equation}
+\vstate{T}{}{\boldsymbol{\xi}} &= \nabla w\!\left(\vstate{Y}{}{\boldsymbol{\xi}}\right)\notag \\
+%
+&=\omega(\boldsymbol{\xi})\frac{-\alpha}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \frac{\vstate{Y}{}{\boldsymbol{\xi}}}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \times \left[\frac{\vstate{Y}{}{\boldsymbol{\xi}}}{|\vstate{Y}{}{\boldsymbol{\xi}}|} \times \frac{\vstate{Y}{}{-\boldsymbol{\xi}}}{|\vstate{Y}{}{-\boldsymbol{\xi}}|}\right]
+\end{align}
 %
 Though it looks complex, \cref{eq:SillingForceNO} indicates a bond force perpendicular to the deformed bond and in the plane containing both the deformed bond and its partner as illustrated in \cref{fig:Bondpair}. 
 The force magnitude is proportional to the sine of the angle between the bonds divided by the length of the deformed bond. 
@@ -219,7 +230,7 @@ Substituting eq.~(\ref{eq:beamdtheta2}) into the equation for the strain energy 
 %
 \begin{align}
 \label{eq:continuousBeamw}
-w &= \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \notag\\
+w(\xi) &= \omega(\xi) \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \notag\\
 &\approx \omega(\xi) \alpha\frac{\xi^2}{2}(\kappa)^2 +\mathcal{O}(\xi^4).\notag
 \end{align}
 %
@@ -243,10 +254,13 @@ with
     m = \int_{-\delta}^{\delta} \omega(\xi) \xi^2 {\rm d}\xi \notag.
 \end{equation}
 
+While this demonstrates the model's equivalence to a linearly-elastic Euler beam, if we keep an additional term from the Taylor series approximation of \cref{eq:beamdtheta}, we recover a slightly more complex expressions for change in angle that is demonstrated in \ref{sec:EringenCompare} to reproduce an Euler beam governed by Eringen's model of nonlocal elasticity.
 
-\subsection{Weighting function and perfect plasticity}
+\subsection{Weighting function and inelasticity}
 \label{sec:WeightFunction}
 The weighting function \(\omega(\xi)\) describes the relative contribution of each bond-pair, and can be defined according to physical or mathematical considerations. 
+\note{Re: Rev 2, Comm 3}
+\add{While any function $\omega(\xi)$ that produces a convergent integral for $m$ will reproduce an elastic Euler beam, a physically meaningful choice of $\omega$ will allow us to extend our model to certain inelastic behaviors.}
 Consider a classical Euler-Bernoulli beam in bending with curvature \(\kappa\). 
 Fibers running parallel to the neutral axis of the beam are stretched in proportion to their distance from the neutral axis, with strain \(\epsilon = y\kappa\). 
 If the fibers are linearly elastic, then the axial stress at each location is \(\sigma = E\epsilon = Ey\kappa\), and the contribution to supported moment \(dM = \kappa E y^2 dA\). 
@@ -297,7 +311,7 @@ The similarity between classical and peridynamic moment formulations suggests a 
 %
 This weight function analogizes the relative contributions of bond pairs of different lengths to the relative contributions of fibers at different distances from the centerline. 
 An example for a rectangular beam is illustrated in \cref{fig:WeightProfileUniform}.
-For an I beam with height \(h_\text{beam}\), width \(w_\text{beam}\), web height \(h_\text{web}\), and web width \(w_\text{web}\), substituting the beam profile
+For an I beam with height \(h_\text{beam}\), width \(w_\text{beam}\), web height \(h_\text{web}\), and web width \(w_\text{web}\), substituting the beam profile\note{added $|\xi|$ term to weight function}
 \begin{equation}
 b(y) = 
   \begin{dcases}
@@ -310,8 +324,8 @@ into \cref{eq:WeightFunction} gives the weight function
 \begin{equation}
 \omega(\xi) = 
   \begin{dcases}
-    w_\text{web} & \text{if } |\xi| \leq \delta\frac{h_\text{web}}{h_\text{beam}} \\
-    w_\text{beam} & \text{if } \delta\frac{h_\text{web}}{h_\text{beam}} < |\xi| \leq \delta \\
+    |\xi| w_\text{web}& \text{if } |\xi| \leq \delta\frac{h_\text{web}}{h_\text{beam}} \\
+    |\xi| w_\text{beam} & \text{if } \delta\frac{h_\text{web}}{h_\text{beam}} < |\xi| \leq \delta \\
     0 &\text{otherwise}
   \end{dcases}\notag
 \end{equation}
@@ -322,13 +336,14 @@ In a deformed elastic perfectly-plastic beam, axial fibers are still stretched i
 For greater stretches, the relationship becomes \(\sigma = \pm E\epsilon_c \). 
 To model this behavior, consider a bond pair with similar behavior: for angular deformation less than some critical angle, the model behaves as previously described, but the magnitude of the force remains constant above a critical deformation
 %
-\[ 
+\begin{equation}
 |\vstate{T}{}{\xi}| = 
   \begin{cases}
-    \alpha \frac{\sin(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}))}{|\vstate{Y}{}{\xi}|} & \quad \text{if } \theta < \theta_c\\
-    \alpha \frac{\sin(\theta_c)}{|\vstate{Y}{}{\xi}|} & \quad \text{if } \theta \geq \theta_c\
+    \alpha \omega(\xi) \frac{\sin(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}))}{|\vstate{Y}{}{\xi}|} & \quad \text{if } \theta < \theta_c\\
+    \alpha \omega(\xi) \frac{\sin(\theta_c)}{|\vstate{Y}{}{\xi}|} & \quad \text{if } \theta \geq \theta_c\
   \end{cases}
-\]
+  \label{eq:epp_force}
+\end{equation}
 %
 to determine the critical angle \(\theta_c\), we let the onset of plasticity in pairs of the longest bonds to coincide with the onset of plasticity in the fibers at the top and bottom surfaces of the classical beam. 
 For small curvatures \(\Delta\theta = \xi\kappa\implies\Delta\theta_c = \frac{2\delta\epsilon_c}{t}\). 
@@ -341,8 +356,195 @@ For curvatures \(|\kappa| > \kappa_c=\frac{2\epsilon_c}{t}\), the radius within 
 %
 Of course, as long as the force is independent of history, this model only represents a nonlinear elastic material. 
 By keeping track of the plastic deformation \(\theta^p (\xi) = \theta-\theta_c\) of each bond-pair, and applying it as an offset, we can reproduce the hysteresis associated with elastic-perfectly-plastic deformation.
+
+\add{More simply, we can model a brittle material by setting the force to zero for bond pairs exceeding a critical angle,}
+%
+\begin{equation}
+|\vstate{T}{}{\xi}| = 
+  \begin{cases}
+    \alpha \omega(\xi) \frac{\sin(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}}))}{|\vstate{Y}{}{\xi}|} & \quad \text{if } \theta < \theta_c\\
+    0 & \quad \text{if } \theta \geq \theta_c\
+  \end{cases}
+  \label{eq:brittle_force}
+\end{equation}
+%
+\add{and additionally recording bond pairs that have exceeded their critical angle and permanently setting their influence, i.e. $\omega$, to zero.}
 %
 %
+\section{Numerical Simulation}
+\label{sec:Numerical}
+\subsection{Discretized Model}
+\label{sec:Discretized}
+Discretizing the bond-pair model is primarily matter of exchanging integrals for sums. 
+\note{Re: Rev 2, Comm 6, also added $\omega(\xi_i)$ to expressions}
+%
+\begin{align}
+%\label{eq:discreteBeamw}
+w(\boldsymbol{\xi}_i) &= \omega(\boldsymbol{\xi}_i)\alpha \left[1+\cos(\theta(\vstate{Y}{}{\boldsymbol{\xi}_i},\vstate{Y}{}{-\boldsymbol{\xi}_i})) \right] \notag \\
+&\approx \omega(\boldsymbol{\xi}_i)\frac{\alpha}{2}\left(\frac{v(\mathbf{x}+\boldsymbol{\xi}_i)-2v(\mathbf{x})+v(\mathbf{x}-\boldsymbol{\xi}_i)}{\boldsymbol{\xi}_i}\right)^2 \notag
+\end{align}
+%
+\add{in which $\boldsymbol{\xi}_i$ is the $i^\textnormal{th}$ bond emanating from the point $\mathbf{x}$ to each of the $n$ points within distance $\delta$ of point $\mathbf{x}$.}
+%
+\begin{align}
+\label{eq:discretebeam}
+\alpha &= \frac{c\; \Delta x}{m} ;\; c= EI ;\; m=\sum_{i=1}^n \omega(\boldsymbol{\xi}_i)\boldsymbol{\xi}_i^2 \implies \nonumber \\
+W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\omega(\boldsymbol{\xi}_i)\left(\frac{v(\mathbf{x}+\boldsymbol{\xi}_i)-2v(\mathbf{x})+v(\mathbf{x}-\boldsymbol{\xi}_i)}{\boldsymbol{\xi}_i}\right)^2\notag
+\end{align}
+%
+Discretization of the original model results in the equation of motion
+\begin{align}
+\rho(\mathbf{x})\mathbf{\ddot{u}}(\mathbf{x}) = \mathbf{f}(\mathbf{x})&+\sum_i \omega(\boldsymbol{\xi}_i)\left\{\frac{\alpha(\mathbf{x})}{|\mathbf{p}_i |}\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \left[ \frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \frac{\mathbf{q}_i}{|\mathbf{q}_i |}\right] \right. \notag \\
+& \left. -\frac{\alpha(\mathbf{x}+\boldsymbol{\xi}_i)}{|\mathbf{p}_i |}\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times\left[\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times \frac{\mathbf{r}_i}{|\mathbf{r}_i |} \right] \right\} \notag
+\end{align}
+with
+\begin{align}
+\mathbf{p}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
+\mathbf{q}_i &= -\boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}-\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
+\mathbf{r}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+2\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i).\notag
+\end{align}
+and for small displacements and rotations in a uniform beam,
+\begin{align}
+\rho(\mathbf{x})\ddot{v}(\mathbf{x}) = &f(\mathbf{x})\notag \\
++&\alpha \sum_i 2\omega(\xi_i)\left(\frac{v(\mathbf{x}-2 \boldsymbol{\xi}_i)-4v(\mathbf{x}- \boldsymbol{\xi}_i)+6v(\mathbf{x})-4v(\mathbf{x}+ \boldsymbol{\xi}_i)+v(\mathbf{x}+2 \boldsymbol{\xi}_i)}{ \boldsymbol{\xi}_i^2}\right) \notag
+\end{align}
+It is worth noting the similarity between this expression and a finite-difference fourth derivative of displacement, a result expected from Euler beam theory.
+This discretization requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(\mathbf{x}- \boldsymbol{\xi}_i)\) is ill-defined. 
+For this reason, the discretization does not allow for areas of higher and lower ``resolution''. 
+%
+\subsection{Numerical Method}
+\label{sec:NumMethod}
+Model behavior is evaluated by implementing the discretized equation of motion.
+The case of a beam simply supported at both ends is chosen for simplicity in both evaluation and comparison.
+\note{Re: Rev1, Comm 6 and Rev 2, Comm 7}\add{To implement the simply-supported condition, it was sufficient to constrain the displacement of a single node for each support.
+Additional constraints would be necessary to approximate beam theories more complex than Euler-Bernoulli.
+In a static analysis, extending the beam two horizons outside each support has no effect on the analytical solution but moves any end-condition effects outside the area of interest.}
+Boundary conditions such as clamped supports and applied moments require careful treatment to ensure both meaningful results and ease of computation.
+\add{While applying displacement constraints is straightforward, the appropriate way to apply an angle constraint or moment to a peridynamic point or collection of points is less obvious.}
+
+Deformations for quasistatic loading are computed by implicitly solving the zero-acceleration discrete equation of motion with a Newton's Method solver.
+\note{Re: Rev 2, Comm 10}\add{In the case of the brittle material model, the beam was loaded until a few bond pairs exceeded the critical angle.
+The most deformed bond pair was broken, and the load step repeated, continuing until total failure.}
+%
+\subsection{Results}
+\label{sec:Results}
+The simplest test case for this model is a linear-elastic beam with a square profile.
+For comparison, equivalent models are created and analyzed in Abaqus 6.12 to verify simple cases.
+Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:elastic_g2000}.
+
+\begin{figure}[h]
+  \centering
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/elastic_h20_g2000.pgf}}
+  \caption{The uniform-load elastic beam is accurately modeled with few nodes}
+  \label{fig:elastic_g2000}
+\end{figure}
+
+As an elastic-perfectly-plastic beam exceeds the elastic limit of its material, plastic zones begin to grow on the top and bottom of the beam's cross section.
+This behavior is mimicked by the plasticity of the longest bond-pairs \note{Re: Rev 2, Comm 8}\add{described in} \cref{eq:epp_force}, producing the results shown in \cref{fig:eppu_h10_g2000}.
+To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
+\begin{figure}[h]
+  \centering
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/eppu_h10_g2000.pgf}}
+  \caption{The elastic perfectly-plastic beam requires finer discretization}
+  \label{fig:eppu_h10_g2000}
+\end{figure}
+
+A material that is plastically deformed does not return to its original state when unloaded.
+For a beam in bending, the residual deformations can be seen in a beam that has been loaded beyond the onset of plastic deformation and then unloaded.
+\note{Re:Rev 2, Comm 9}\add{The Abaqus model retains slightly more than} \sfrac{1}{10} \add{of its loaded displacement after being completely unloaded.}
+This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticityN,fig:ResidualPlasticityH}. 
+Accurate residual deformation modeling requires both a relatively small horizon and a fairly large number of nodes.
+
+%
+\begin{figure}[h]
+  \centering
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
+  \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
+  \label{fig:ResidualPlasticityN}
+\end{figure}
+%
+\begin{figure}[h]
+  \centering
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
+  \caption{Accurately modeling residual plastic deformation also requires a small horizon}
+  \label{fig:ResidualPlasticityH}
+\end{figure}
+
+It is more difficult to verify the brittle material model \note{Re: Rev 2, Comm 10\&11}\add{described by} \cref{eq:brittle_force} because brittle failure is unstable.
+When a crack begins, moment is transferred to other bond pairs, and failure progresses until every pair of bonds surrounding a node are broken, creating a hinge at that node.
+This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Health'' represents the fraction of bond-pairs about each node that have \note{Re: Rev 2, Comm 10}\add{never exceeded their critical angle and therefore have }not failed.
+
+\begin{figure}[h]
+  \centering
+  \resizebox{0.5\linewidth}{!}{\input{\plotpath/brittle_h10_n200.pgf}}
+  \caption{A brittle beam with prescribed center displacement}
+  \label{fig:brittleBeam}
+\end{figure}
+
+Unlike a local model, partial failure is observed at nodes near the plastic hinge, as pairs of bonds that straddle the hinge are broken.
+
+\section{Conclusion}
+\label{sec:Conclusion}
+
+As far as we know, this the first peridynamic state based thin feature model, and results in accurate deformation results for simple beam tests.
+The \change{proposed}{perfect plasticity and simple brittle} damage models successfully reproduce the impact of nonlinear \change{elasticity}{behaviors} on deformation of a rectangular cantilever, and the framework is laid to allow application of the same models to I-beams.
+It simplifies treatment of bending in beams, and is extensible to bending in plates.
+\appendix
+\section{Fr\'echet Derivative}
+\label{sec:frechet}
+
+The derivative of a function of a state is defined by Silling in \cite{silling2007peridynamic} as follows:
+\begin{quote}
+Let $\Psi$ be a function of a state, $\Psi(\cdot):\mathcal{A}_m\rightarrow\mathcal{L}_n$. Suppose there exists a state-valued function denoted $\nabla\Psi\in\mathcal{A}_{m+n}$ such that for any $\vstate{A}{}{}\in\mathcal{A}_m$ and any $\Delta\vstate{A}{}{}\in\mathcal{A}_m$,
+\begin{equation}
+  \Psi(\vstate{A}{}{}+\Delta\vstate{A}{}{})=\Psi(\vstate{A}{}{})+\nabla\Psi(\vstate{A}{}{})\bullet\Delta\vstate{A}{}{}+o(||\Delta\vstate{A}{}{}||).
+\end{equation}
+Then $\Psi$ is said to be \textit{differentiable} and $\nabla\Psi$ is called the \textit{Frechet derivative} of $\Psi$.
+\end{quote}
+This is a fairly straightforward way of defining a derivative with respect to a state, and we will apply it to derive the bond force function from the bond-pair energy function
+%
+\begin{align}
+%
+\tvstate{T}{}{\boldsymbol{\xi}} &= \nabla w\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}\right)\notag \\
+%
+w&=\omega\!\left(\boldsymbol{\xi}\right)\alpha\left[1+\cos\!\left(\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right)\right]\notag \\
+%
+w\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}+\Delta\tvstate{Y}{}{\boldsymbol{\xi}}\right) &=
+ \omega\!\left(\boldsymbol{\xi}\right)\alpha\left[1+\cos\!\left(\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}+\Delta\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right)\right]\notag
+\end{align}
+%
+\begin{multline}
+\nabla w\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}\right)\bullet\Delta\tvstate{Y}{}{\boldsymbol{\xi}}= 
+w\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}+\Delta\tvstate{Y}{}{\boldsymbol{\xi}}\right) -w\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}\right) \notag\\
+%
+=\omega\!\left(\boldsymbol{\xi}\right)\alpha\sin\!\left(\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right)\!\left[\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}+\Delta\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)-\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right]
+\end{multline}
+%
+\begin{equation}
+\left[\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}}+\Delta\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)-\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right] = 
+\frac{\Delta\tvstate{Y}{}{\boldsymbol{\xi}}}{|\tvstate{Y}{}{\boldsymbol{\xi}}|}\bullet \hat{\theta}\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\notag
+\end{equation}
+%
+To determine the $\hat{\theta}$ direction vector, we must construct a vector that is normal to $\tvstate{Y}{}{\boldsymbol{\xi}}$ and that is in the plane containing both $\vstate{Y}{}{\boldsymbol{\xi}}$ and $\vstate{Y}{}{\boldsymbol{-\xi}}$.
+The cross product of $\vstate{Y}{}{\boldsymbol{\xi}}$ and $\vstate{Y}{}{\boldsymbol{-\xi}}$ is a vector normal to that plane, so any vector normal to that cross product will be in the correct plane.
+Therefore, the vector $\vstate{Y}{}{\boldsymbol{\xi}}\times\left[\vstate{Y}{}{\boldsymbol{\xi}}\times\vstate{Y}{}{\boldsymbol{-\xi}}\right]$ is both normal to $\vstate{Y}{}{\boldsymbol{\xi}}$ and is in the plane containing both $\vstate{Y}{}{\boldsymbol{\xi}}$ and $\vstate{Y}{}{\boldsymbol{-\xi}}$.
+Normalizing gives us the $\hat{\theta}$ direction vector:
+%
+\begin{equation}
+\hat{\theta}\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)=
+\frac{\tvstate{Y}{}{\boldsymbol{\xi}}\times\left[\tvstate{Y}{}{\boldsymbol{\xi}}\times\tvstate{Y}{}{\boldsymbol{-\xi}}\right]}{|\tvstate{Y}{}{\boldsymbol{\xi}}||\tvstate{Y}{}{\boldsymbol{\xi}}||\tvstate{Y}{}{\boldsymbol{-\xi}}|\sin\!\left(\theta\!\left(\tvstate{Y}{}{\boldsymbol{\xi}},\tvstate{Y}{}{-\boldsymbol{\xi}}\right)\right)}\notag 
+\end{equation}
+%
+We combine all of these to get the expression for bond force found in \cref{eq:SillingForceNO}.
+\begin{align}
+%
+\tvstate{T}{}{\boldsymbol{\xi}} &=
+\omega\!\left(\boldsymbol{\xi}\right)\frac{-\alpha}{|\tvstate{Y}{}{\boldsymbol{\xi}}|} \frac{\tvstate{Y}{}{\boldsymbol{\xi}}}{|\tvstate{Y}{}{\boldsymbol{\xi}}|} \times 
+\left[\frac{\tvstate{Y}{}{\boldsymbol{\xi}}}{|\tvstate{Y}{}{\boldsymbol{\xi}}|} \times 
+\frac{\tvstate{Y}{}{-\boldsymbol{\xi}}}{|\tvstate{Y}{}{-\boldsymbol{\xi}}|}\right]\notag
+\end{align}
+%
+
 \section{Relation to Eringen Nonlocality}
 \label{sec:EringenCompare}
 %If we relax our homogeneity assumption somewhat, we recover from \cref{eq:beamdtheta} slightly more complex expressions for change in angle
@@ -385,18 +587,18 @@ Not all of these higher-order terms can be separated into the product of a local
 
 Eringen's model for nonlocal elasticity in \cite{eringen1983differential} begins with a nonlocal modulus (denoted here as \(K(|\mathbf{x}'-\mathbf{x}|,\tau)\)) that relates the nonlocal stress \(\mathbf{t}\) at a point to the classical (local) stress \(\boldsymbol{\sigma}\) in the nearby material through the integral
 \begin{equation}
-\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\sigma(\mathbf{x}')dv(\mathbf{x}').\notag
+\mathbf{t} = \int_\mathbf{V} K(|\mathbf{x}'-\mathbf{x}|,\tau)\boldsymbol{\sigma}(\mathbf{x}')dv(\mathbf{x}').\notag
 \end{equation}
 In the local limit these relationships take the form of higher-order gradients.
-Using a 1-dimensional decaying exponential nonlocal modulus \(K(|x|,\tau)=\frac{1}{l\tau}e^{-\frac{|x|}{l\tau}}\)results in a relationship between \(t\) and \(\sigma\) 
+Using a 1-dimensional decaying exponential nonlocal modulus \(K(|x|,\tau)=\frac{1}{l\tau}e^{-\frac{|x|}{l\tau}}\)results in a relationship between \(t_\text{1D}\) and \(\sigma_\text{1D}\) \note{Re: Rev 2, Comm 5}
 \begin{align}
-\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)t&=\sigma,\notag
+\left(1-\tau^2l^2\frac{\partial^2}{\partial x^2}\right)t_\text{1D}&=\sigma_\text{1D},\notag
 \end{align}
 in which \(\tau^2l^2\) is a scale-based material parameter.
-For well-behaved \(t\) and \(\sigma\) and small values of \(\sigma''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
+For well-behaved \(t_\text{1D}\) and \(\sigma_\text{1D}\) and small values of \(\sigma_\text{1D}''''\) and \(\tau^2l^2\), we can see that this relationship could be reformulated as
 \begin{equation}
 \label{eq:NLstress}
-t=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\sigma.\notag
+t_\text{1D}=\left(1+\tau^2l^2\frac{\partial^2}{\partial x^2}\right)\sigma_\text{1D}.\notag
 \end{equation}
 If we consider the results of the previous section and let \(dM = y\sigma dA\) and \(\sigma = Ey\kappa\), the contribution to moment resulting from Eringen's nonlocal elasticity in a fiber at \(y\)
 \begin{equation}
@@ -424,114 +626,6 @@ The similarity between \cref{eq:NLbending,eq:EringenMoment} is not accidental; E
 It is therefore unsurprising that, like Eringen's nonlocal elasticity\cite{Challamel2008small}, this peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.
 Instead, the advantage of peridynamic models is their natural handling of discontinuities.
 
-\section{Numerical Simulation}
-\label{sec:Numerical}
-\subsection{Discretized Model}
-\label{sec:Discretized}
-Discretizing the bond-pair model is primarily matter of exchanging integrals for sums. 
-%
-\begin{align}
-%\label{eq:discreteBeamw}
-w &= \alpha \left[1+\cos(\theta(\vstate{Y}{}{\xi},\vstate{Y}{}{\mathbf{-\xi}})) \right] \notag \\
-&\approx \frac{\alpha}{2}\left(\frac{v(x+\xi)-2v(x)+v(x-\xi)}{\xi}\right)^2 \notag
-\end{align}
-%
-\begin{align}
-\label{eq:discretebeam}
-\alpha &= \frac{c\; \Delta x}{m} ;\; c= EI ;\; m=\sum_{i=1}^n \omega(\xi_i)\xi_i^2 \implies \nonumber \\
-W&=\Delta x \sum_{i=1}^n \frac{EI}{2}\left(\frac{v(x+\xi_i)-2v(x)+v(x-\xi_i)}{\xi_i}\right)^2\notag
-\end{align}
-%
-Discretization of the original model results in the equation of motion
-\begin{align}
-\rho(\mathbf{x})\mathbf{\ddot{u}}(\mathbf{x}) = \mathbf{f}(\mathbf{x})&+\sum_i \omega(\xi_i)\left\{\frac{\alpha(\mathbf{x})}{|\mathbf{p}_i |}\frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \left[ \frac{\mathbf{p}_i}{|\mathbf{p}_i |}\times \frac{\mathbf{q}_i}{|\mathbf{q}_i |}\right] \right. \notag \\
-& \left. -\frac{\alpha(\mathbf{x}+\boldsymbol{\xi}_i)}{|\mathbf{p}_i |}\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times\left[\frac{(-\mathbf{p}_i)}{|\mathbf{p}_i |}\times \frac{\mathbf{r}_i}{|\mathbf{r}_i |} \right] \right\} \notag
-\end{align}
-with
-\begin{align}
-\mathbf{p}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
-\mathbf{q}_i &= -\boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}-\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x});\notag\\
-\mathbf{r}_i &= \boldsymbol{\xi}_i+\mathbf{u}(\mathbf{x}+2\boldsymbol{\xi}_i)-\mathbf{u}(\mathbf{x}+\boldsymbol{\xi}_i).\notag
-\end{align}
-and for small displacements and rotations in a uniform beam,
-\begin{align}
-&\rho(x)\ddot{v}(x) = f(x)+\alpha \sum_i 2\omega(\xi_i)\bigg( \notag\\
-&\left. \frac{v(x-2\xi_i)-4v(x-\xi_i)+6v(x)-4v(x+\xi_i)+v(x+2\xi_i)}{\xi_i^2}\right) \notag
-\end{align}
-It is worth noting the similarity between this expression and a finite-difference fourth derivative of displacement, a result expected from Euler beam theory.
-This discretization requires that nodes be evenly spaced along the entire beam, otherwise the displacement \(v(x-\xi_i)\) is ill-defined. 
-For this reason, the discretization does not allow for areas of higher and lower ``resolution''. 
-%
-\subsection{Numerical Method}
-\label{sec:NumMethod}
-Model behavior is evaluated by implementing the discretized equation of motion.
-The case of a beam simply supported at both ends is chosen for simplicity in both evaluation and comparison.
-Boundary conditions such as clamped supports and applied moments require careful treatment to ensure both meaningful results and ease of computation.
-
-Deformations for quasistatic loading are computed by implicitly solving the zero-acceleration discrete equation of motion with a Newton's Method solver.
-%
-\subsection{Results}
-\label{sec:Results}
-The simplest test case for this model is a linear-elastic beam with a square profile.
-For comparison, equivalent models are created and analyzed in Abaqus 6.12 to verify simple cases.
-Even a coarse discretization successfully reproduces the elastically deformed beam shape in \cref{fig:elastic_g2000}.
-
-\begin{figure}[h]
-  \centering
-  \resizebox{0.5\linewidth}{!}{\input{\plotpath/elastic_h20_g2000.pgf}}
-  \caption{The uniform-load elastic beam is accurately modeled with few nodes}
-  \label{fig:elastic_g2000}
-\end{figure}
-
-As an elastic-perfectly-plastic beam exceeds the elastic limit of its material, plastic zones begin to grow on the top and bottom of the beam's cross section.
-This behavior is mimicked by the plasticity of the longest bond-pairs, producing the results shown in \cref{fig:eppu_h10_g2000}.
-To accurately capture this phenomenon and model beam plasticity, a finer discretization is required.
-\begin{figure}[h]
-  \centering
-  \resizebox{0.5\linewidth}{!}{\input{\plotpath/eppu_h10_g2000.pgf}}
-  \caption{The elastic perfectly-plastic beam requires finer discretization}
-  \label{fig:eppu_h10_g2000}
-\end{figure}
-
-A material that is plastically deformed does not return to its original state when unloaded.
-For a beam in bending, the residual deformations can be seen in a beam that has been loaded beyond the onset of plastic deformation and then unloaded.
-This result is observed in the bond-pair plasticity model, shown in \cref{fig:ResidualPlasticityN,fig:ResidualPlasticityH}. 
-Accurate residual deformation modeling requires both a relatively small horizon and a fairly large number of nodes.
-
-%
-\begin{figure}[h]
-  \centering
-  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_h10_g2000_n.pgf}}
-  \caption{The need for fine discretization is even more apparent when representing residual plastic deformation}
-  \label{fig:ResidualPlasticityN}
-\end{figure}
-%
-\begin{figure}[h]
-  \centering
-  \resizebox{0.5\linewidth}{!}{\input{\plotpath/unloaded2_n1000_g2000_h.pgf}}
-  \caption{Accurately modeling residual plastic deformation also requires a small horizon}
-  \label{fig:ResidualPlasticityH}
-\end{figure}
-
-It is more difficult to verify the brittle material model because brittle failure is unstable.
-When a crack begins, moment is transferred to other bond pairs, and failure progresses until every pair of bonds surrounding a node are broken, creating a hinge at that node.
-This is borne out by the results in \cref{fig:brittleBeam}, in which ``Nodal Health'' represents the fraction of bond-pairs about each node that have not failed.
-
-\begin{figure}[h]
-  \centering
-  \resizebox{0.5\linewidth}{!}{\input{\plotpath/brittle_h10_n200.pgf}}
-  \caption{A brittle beam with prescribed center displacement}
-  \label{fig:brittleBeam}
-\end{figure}
-
-Unlike a local model, partial failure is observed at nodes near the plastic hinge, as pairs of bonds that straddle the hinge are broken.
-
-\section{Conclusion}
-\label{sec:Conclusion}
-
-As far as we know, this the first peridynamic state based thin feature model, and results in accurate deformation results for simple beam tests.
-The proposed damage model successfully reproduces the impact of nonlinear elasticity on deformation of a rectangular cantilever, and the framework is laid to allow application of the same model to I-beams.
-It simplifies treatment of bending in beams, and is extensible to bending in plates.
 
 
 \bibliographystyle{elsarticle-num}

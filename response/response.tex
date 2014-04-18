@@ -3,6 +3,8 @@
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{amsmath}
+%\usepackage[normalem]{ulem}
+\usepackage{cancel}
 \definecolor{light-gray}{gray}{0.5}
 
 
@@ -17,258 +19,155 @@
 \section{Reviewer}
 %
 \subsection*{General Statement}
-In general, I am not convinced of the benefits of particle methods when compared to traditional finite element analysis. Although they eliminate the sometimes troublesome problem of mesh generation, they create new problems of their own. In particular, they are hard to debug (because the patch test often doesn’t work), it is typically difficult to pin down an order of accuracy, and it is typically difficult to apply boundary conditions. Nonetheless, I recognize that they are part of the toolbox and therefore are within the scope of IJNME.
+Let me state at the outset that this is a welcome paper adressing a problem with much educational (and perhaps practical) value. It should certainly be published after revision to address some issues (some minor, some less so).In this paper the authors use the basic concepts of the peridynamic theory (of 3D solids) to develop and study a similar model for beams. Their approach is not one which uses the 3D peridynamic theory to look at a beam as a 3D structure but rather one where a peridynamic-like approach is developed and applied to examining the 1D theory of bending (with of course 3D considerations used and averaged across the cross-section to develop the constitutive law). This seems to me to be a good way to proceed.
 %
-{\color{red}
-  \begin{itemize}
-    \item We have added a paragraph at the end of Section 1 that highlights the difference between peridynamics and previous “particle methods.” The main difference is that in peridynamics, we numerically approximate a different set of continuum equations.
-  \end{itemize}}
-
-This particular paper, however, has insufficient novelty to merit publication in its present form. In particular, 
-
-\begin{enumerate}
-  \item The peridynamic framework, including the method to compute the deformation gradient, is already established in the previous literature.
-  {\color{red}
-    \begin{itemize}
-      \item We have added statements in the abstract and introduction that highlight what is new about the work being reported. Specifically, this represents the first successful implementation of a rate-dependent material model within peridynamics. We also present the first full-scale 3D solution of a realistic, reasonably complex application. This work therefore demonstrates to the community, for the first time, the ability of the peridynamic method to solve practical problems involving complex materials resulting in good agreement with experimental data.
-    \end{itemize}}
-  %
-  \item The viscoplastic formulation and constitive model follows fairly classical nonlinear solid mechanics, and therefore does not appear to be novel. 
-  {\color{red}
-    \begin{itemize}
-      \item Viscoplasticity has never been used within peridynamics.  See previous responses.
-    \end{itemize}}
-  %
-  \item The computational studies are quite limited, by the authors’ own admission (“while failure can be modeled with peridynamics, it is beyond the scope of this paper; therefore, these experiments were not attempted in numerical simulation”, p. 19). 
-  {\color{red}
-  \begin{itemize}
-    \item The focus of this paper was to show that peridynamics could be used with conventional (stress-strain) constitutive models.   Modeling failure is the main advantage of the peridynamic approach, which has been demonstrated in the cited papers and will be further developed in a future paper with the combination of a viscoplastic constitutive model and a novel failure mechanism applied by breaking ``bonds''.
-  \end{itemize}}
-  %
-\end{enumerate}
-  
 \subsection*{Specific Comments}
 
 \begin{enumerate}
 %
-   \item p. 3, It has been proved that Equation 1 reduces to the classical continuum partial differential equation\dots Which one? Momentum?
+   \item There is some literature on peridynamics and beams which the authors are not aware of, e.g. A displacement based framework for the micromechanics of elastic beams by G. Failla, A. Sofi and M. Zingales which is to (or has already) appeared in IJSS.
    {\color{red}
      \begin{itemize}
-        \item Yes, linear momentum.  This has been made more clear in the rewritten introduction.
+        \item We were unable to find the specific paper mentioned, but a search revealed interesting and relevant work by Paola et al. that is definitely worth mentioning and has been added to section 1.1
      \end{itemize}}
 %
-  \item p. 5, should be $F = I + \nabla_x u$ (standard notation)
+  \item The authors mention in the Introduction that the Eringen model cannot reproduce the scale stiffening observed in nanoscale beams. Does their model reproduce the correct effects? Can they compare with experiments?
    {\color{red}
      \begin{itemize}
-        \item The notation I used is identical to the notation used by Lawrence E. Malvern in his classic book \underline{Introduction to the Mechanics of a Continuous Medium} (p.\ 162 in the version I have).  This is further clarified by showing the incidental notation in the revision.
+        \item In the last paragraph of Appendix B (previously Section 3), it is noted that:
+        \begin{quote}
+        It is therefore unsurprising that, like Eringen's nonlocal elasticity [Challamel2008], this peridynamic bending model fails to predict the stiffening associated with nanoscale cantilevers.''
+        \end{quote}
+        \item More generally, this model, like Eringen's model, predicts relative softening of nanoscale beams. Its advantages lie in the lack of spatial derivatives.
      \end{itemize}}
 %
-  \item Eq. (30) is an additive decomposition of the deviator of the referential tensor $\mathbf{d}$ based on the additive decomposition of the rate of deformation $\mathbf{D}$. A reference and/or some background should be included.
+  \item In section 1.2 they say that “The term peridynamic was coined by Silling in [11]...” while this is correct, Silling did much more than coin the term in that paper. He laid out the theory there for the first time. He should be given credit for more than coining a term.
   {\color{red}
      \begin{itemize}
-        \item Eq.\ (30) is an additive decomposition of the deviatoric part of $\mathbf{d}$ which is referred to as the {\em unrotated rate of deformation tensor}.  $\mathbf{d}$ is found from Eq.\ (17) by transforming $\mathbf{D}$, the {\em rate of deformation tensor}, with the rotation tensor $\mathbf{R}$.  This entire process is taken from the paper by Flanagan and Taylor ``An accurate numerical algorithm for stress integration with finite rotations'', which I believe to be a standard algorithm for developing kinematics in large displacement problems.
+        \item Very true! We took Silling's creation of the field for common knowledge and have corrected the first line of 1.2 to more accurately credit him.
      \end{itemize}}
 %
-     \item Notation: Usually lower case letters are used for spatial quantities and upper case letters are used for referential quantities, e.g., $\mathbf{d}$ is standard for the rate of deformation tensor.
+     \item It is not clear to me how the authors use the energy $w = \alpha[1 + cos\theta]$ in their derivation of equation (2). Since equation (2) relates force states and kinematic states it must be based on some constitutive hypothesis (presumably this energy function). The authors should provide more detail on the derivation of (2) and its relation to w.
   {\color{red}
      \begin{itemize}
-        \item All of the notation used in this paper follows very closely the notation used by Malvern and/or Flanagan and Taylor.
+        \item The derivation has been added along as Appendix A.
      \end{itemize}}
 %
-     \item I don't understand why eq.\ (35) is presented. As far as I know, the use of previous values of strain in order to extrapolate the strain rate is never used in the literature, and all previous authors obtain the strain by solving an equation like (36). So unless there is some good reason to believe that (35) might be plausible (e.g., an instance where it is successfully used in the previous literature), I would drop it from the paper.
+     \item I am confused in section 2.1 when the energy suddenly becomes $w = \omega(\xi)\alpha[1 + cos \theta]$ rather than the one they had earlier $w = \alpha[1 + cos\theta]$ . Isn’t it the former (with the $\omega$) the one that is fundamental to this peridynamic-like model and shouldn’t it be introduced at the outset? Shouldn’t it be used, e.g. in the discussion leading to (2) and not $w = \alpha[1 + cos\theta]$ .
   {\color{red}
      \begin{itemize}
-        \item For the reviewer's reference a paper from Brown University by Peirce, Shih, and Needleman titled ``A tangent modulus method for rate dependent solids'' uses a method similar to what is presented in Eq.\ (35), a fully explicit method.
+        \item The weighting function is now included from before equation (2) in the definition of the model.
         \end{itemize}}
 %
-        \item Mistaken forward reference to eq. 59 on p. 14.
-  {\color{red}
-     \begin{itemize}
-        \item Corrected in revision
-     \end{itemize}}
-%
-      \item The paper mixes up modeling with discretization. For example, the model apparently doesn't discuss how the pressure component of stress is handled, and yet this pops up in the discussion of the numerics (eq.\ (51)).
-  {\color{red}
-     \begin{itemize}
-        \item I do not fully understand this comment, von Mises plasticity only deals with the deviatoric part of stress to define a yield surface, but the pressure component must be added back in after the deviatoric stress has been updated. Nevertheless, a mistake was found in Eq.\ (51) and corrected in the revision.
-      \end{itemize}}
-%
-        \item The total strain is apparently defined on a particle-by-particle basis using (61) and (12). I suppose the plastic strain is a nodal history variable?
-  {\color{red}
-     \begin{itemize}
-        \item All stress or strain quantities including the internal state variable, {\em equivalent plastic strain}, are calculated for each particle at each timestep. 
-     \end{itemize}}
-%
-        \item The number of nodes required seems to be huge in both simulations in Section 10. Is there any compensating benefit (versus finite elements)?
-  {\color{red}
-     \begin{itemize}
-        \item The number on nodes was large, but these simulations ran in only a few hours on 4 processors.  The largest compensating benefit is the ability to model failure (outside the scope of this paper, but discussed in others) with the same set of fundamental equations without the need for separate governing equations for crack initiation, propagation, etc. (e.g., cohesive zones, element death).
-     \end{itemize}}
- %
-        \item The literature review includes previous papers (mainly by the same group of authors) on peridynamics but does not review the larger universe of particle methods for solid mechanics, and I think some references in this regard would be helpful. In particular, I think some of the previous particle methods are quite similar to peridynamics. Unfortunately, I am not an expert in this, but I know of at least three previous papers proposing particle methods for solid mechanics.
-       \begin{enumerate}
-         \item Rabczuk, Belytschko and Xiao, Stable particle methods based on Lagrangian kernels, CMAME 193 (2004) 1035-1063.
-         \item Delaplace and Ibrahimbegovic, Performance of time-stepping schemes for discrete models in fracture dynamics, IJNME 65 (2005) 1527-1544.
-         \item Gao and Klein, Numerical simulation of crack growht in an isotropic solid with randomized internal cohesive bonds, JMPS 46 (1998) 187-218.
-       \end{enumerate}
+  \item In Section 4.2 the authors say the uniformly loaded beam is simply-supported at the two ends. Surely this is not adequate for the peridynamic model? Or if it is, there should be a careful explanation of why this is so. In general the formulation of the boundary conditions is intimately tied up with the sort of theory being used. For example in the strain gradient theory of elasticity the boundary conditions are different to those of the classical theory of elasticity. Or in the Timoshenko beam theory it is not enough the say that the displacement and bending moment vanish at a support.
 %
      {\color{red}
      \begin{itemize}
-        \item The main reason other particle methods were not reviewed was because all of these other methods are based on theory which solves partial differential equations and are therefore fundamentally different from the nonlocal integral equations solved in peridynamics.  However, additional discussion was added in the revision which points out these differences and references the reviewers suggested papers where appropriate. 
-         \end{itemize}}
-        %
-        \item Inconsistent verb tense in second paragraph of summary (is, was.) 
-
-p. 2, Where $\rho \rightarrow$ where $\rho$ 
-
-Van der Walls $\rightarrow$ Van der Waals 
-
-any pair of particles interact $\rightarrow$ interacts 
-
-singe $\rightarrow$ single 
-
-spacial $\rightarrow$ spatial 
-
-principle $\rightarrow$ principal 
-
-et. al $\rightarrow$ et al. (italicize)   
-     
-%
-     {\color{red}
-     \begin{itemize}
-       \item Corrected in revision
+        \item Added significant detail to the discussion of boundary conditions.
      \end{itemize}}
 %
 \end{enumerate}
 
 \section{Reviewer}
 \subsection*{General Statement}
-I recommend that the authors prepare a revised version of their paper to be considered for publication in the International Journal of Numerical Methods in Engineering.  Specifically, the authors should consider adding discussion related to the following eleven comments (1)-(11).
+
 %
 \subsection*{Specific Comments}
 
 \begin{enumerate}
 
-  \item This is the first time that I have read about the peridynamic theory.  In many ways it seems to be similar to the notions used in SPH (smooth particle hydrodynamics).  It is know that the SPH theories have difficulties handling material strength in a consistent stable manner.  I would expect the same problems with the peridynamic theory. It would be helpful to compare these theories and explain important differences and potential advantages. 
+  \item A remarkable feature of the proposed beam model is that it consists only of a material model – the equilibrium equation is the same as for a continuum. The authors should consider highlighting this fact as compared with traditional beam theories, which rely on deriving new equilibrium equations.
 %
      {\color{red}
      \begin{itemize}
-        \item Peridynamics is fundamentally different from SPH because SPH is still based on theory that solves partial differential equations.  In SPH, properties of each particle are smeared over a smoothing length, but the motion of the particles is still governed by PDE's.  In peridynamics the conservation of momentum equation is a nonlocal integral equation capable of handling even discontinuous displacements fields that would cause problems in SPH where the PDE's could not be evaluated.  SPH also suffers from a tensile instability that is not problematic for peridynamics.  Additional discussion has been added to the introduction to address these issues.
+        \item A line added to the second paragraph of the Introduction makes this clearer:
+        \begin{quote}
+        \underline{Unlike many continuum beam theories that derive new equations of motion (such as fourth} \underline{order PDE's) from the 3D elastic constitutive model, the new} \cancel{This} model is not derived from prior ordinary peridynamic models based on bond extension, but \underline{is a material model that} directly resists bending deformation \underline{while maintaining the same conservation of momentum} \underline{equation as the 3D model}.
+        \end{quote}
      \end{itemize}}
 %
-  \item Introducing nonlocality through the integral over the sphere of radius $\delta$ in the reference configuration violates the notion of a finite wave speed in the material.  Obviously the same problem occurs when finite elements are used to average deformation information over a finite region.  Some comments about the effect of this in this peridynamic theory would be helpful
+  \item In equation (1), define u.
+%
      {\color{red}
      \begin{itemize}
-        \item As the reviewer points out this is a similar issue in finite elements.  Wave speeds have been analyzed in peridynamics and have been shown to not have an infinite wave speed, but the wave speeds are a function of wave length.  When analyzed it turns out that the bulk modulus is directly related to $\delta$ and therefore, becomes an integral part of the defination of wave speed, i.e. $\delta$ is a material property.
+        \item Added to the line above equation (1)
      \end{itemize}}
 %
-  \item On page 2 it is stated that:
-  \begin{quotation}
-  \noindent ``In this implementation, $\omega$ is always either 0 or 1, which corresponds to whether the bond is `broken' or not.'' 
- \end{quotation}
- It seems to me that $\delta$ defines the radius of influence of material points and $\omega$ defines the strength of the influence.  In particular, it is surprising to me that a uniform distribution of $\omega$ with a sharp cut-off would not cause serious problems with wave propagation.  It would be helpful to comment on this in a revised version of the paper. 
+  \item I’m not sure I understand the significance of the particular choice of weighting function in equation (6). It seems like there could be many choices that reproduce EI in the standard theory. Please clarify.
+%
      {\color{red}
      \begin{itemize}
-        \item The reviewer is correct in his recognition of $\omega$ as a strength of influence.  So far only uniform distributions of $\omega$ have been evaluated and they do not show any numerical instablity.  Additional discussion was added to the revision.
+        \item Added the following sentence, which should clarify this issue.
+        \begin{quote}
+While any function $\omega(\xi)$ that produces a convergent integral for $m$ will reproduce an elastic Euler beam, a physically meaningful choice of $\omega$ will allow us to extend our model to certain inelastic behaviors.
+        \end{quote}
      \end{itemize}}
 %
-  \item It would be helpful to provide a discussion of how displacement and traction boundary conditions can be implemented using this theory.
+  \item The relationship with Eringen’s model is interesting but a bit of a distraction, and it could safely be moved to an appendix where it would not interrupt the main development.
+%
      {\color{red}
      \begin{itemize}
-        \item Displacements, velocities, and body force densities can be applied to regions of finite volume.  Information on this was added to the revised article in the discussion of the numerical simulations.  See Silling ``Reformulation of elasticity theory for discontinuities and long-range forces'' cited in article for further reading.
+        \item The section has been moved to Appendix B
      \end{itemize}}
 %
-  \item It would be helpful to discuss the specific approximations that are used when the sphere of influence (associated with $\delta$) extends outside of the boundaries of the body. 
+  \item The symbol t (not bold) is used with multiple meanings, please disambiguate.
+%
      {\color{red}
      \begin{itemize}
-        \item There are no issues when $\delta$ extends outside the boundaries of the body.  A proof has been included which shows that the deformation gradient can be correctly calculated for any assumed deformation state in the revised article.
+        \item Substituted $t_\text{1D}$ and $\sigma_\text{1D}$ for the the non-bold instances of t and $\sigma$ from Eringen's work.
      \end{itemize}}
- %
-  \item It is my understanding that this method tracts the motion of material points. Since the sphere of influence (associated with $\delta$) is defined relative to the reference configuration, the same material points remain in communication even if the material is highly stretched or highly compressed. It would seem to me that for the highly stretched case the method would yield unphysical dispersion of waves since the region of influence can be quite large.
+%
+  \item In section 4.1, it should be stated that the model is for a particular choice of horizon, which is $\delta = 2\xi$. Also, I don’t see where $\omega$ is defined.
+%
      {\color{red}
      \begin{itemize}
-        \item The reviewer's assumptions are correct, but the same thing could happen in a finite element simulation as well when elements become severely stretched or distorted.  It would be possible to redefine the $\delta$ at every time step where material points far away would be removed from this horizon and others added; however, this adaptivity feature does not currenlty exist in the code used here, Emu.
+        \item The model leaves $\delta$ and $\omega$ undetermined. The first equations of section 3.1 (formerly 4.1) have been altered and a note added to make that clear.
+        \begin{quote}
+          \underline{in which $\boldsymbol{\xi}_i$ is the $i^\textnormal{th}$ bond emanating from the point $\mathbf{x}$ to each of the $n$ points within distance} \underline{ $\delta$ of point $\mathbf{x}$.}
+        \end{quote}
      \end{itemize}}
- %
-  \item For an elastic solid, which has a unique unstressed reference shape, it makes sense to refer the constitutive response to a reference configuration.  In contrast, the material response of an elastic-viscoplastic material, which has no unique unstressed configuration or shape, should be formulated in terms of constitutive equations which are explicitly independent of the arbitrary choice of the reference configuration. Moreover, since the main motivation for developing meshless methods is to handle large deformations it is unfortunate that the elastic-viscoplastic constitutive equations have been formulated with respect to the reference configuration using the rotation tensor $\mathbf{R}$ in (15).  Also, the integral operators are specified by considering regions defined in the reference configuration.  It is possible to develop this method in an Eulerian framework more similar to SPH methods? 
+%
+  \item In section 4.2, the sentence “Boundary conditions... require careful treatment...” is vague. Please elaborate on how boundary conditions are implemented.
+%
      {\color{red}
      \begin{itemize}
-       \item The method of using $\mathbf{R}$ to provide an unrotated configuration in which to apply the constitutive model such that the stress rates will be objective is used in many finite element codes, including the production code at Sandia National Laboratories, PRESTO.  This method is described in detail in the Flanagan and Taylor paper ``An accurate numerical algorithm for stress integration with finite rotations.''  Futhermore, Eulerian frame constitutive equations can be used in peridynamics as long as we define $\mathbf{F}$ and $\mathbf{R}$.
+        \item Added significant detail to the discussion of boundary conditions.
      \end{itemize}}
-     %
-  \item The constitutive equations used for determining viscoplastic response are not clear. It is my understanding that (28) is a yield function which limits the magnitude of the deviatoric stress during loading
-  \begin{equation}
-    S = | \mathbf{S} | = \sqrt{\frac{2}{3}} G \quad \mbox{during loading.}
-    \tag{28}
-  \end{equation}
-  Then, using the additive decomposition (29), the elastic constitutive equation (31), the flow rule (32) and (33), and the expression (38) it can be shown that 
-  \begin{equation}
-    \dot{S} = 2 \mu \left ( \mathbf{Q} : \dot{\mathbf{e}} - \sqrt{\frac{3}{2}} \dot{\varepsilon}_p \right ) = \sqrt{\frac{2}{3}} \dot{G}
-    \tag{A1}
-  \end{equation}
-  However, viscoplasticity is introduced in by taking the value of $G$ to be a function of the equivalent plastic strain $\varepsilon_p$ and plastic strain rate $\dot{\varepsilon}_p$
-  \begin{equation}
-    G = f \left ( \varepsilon_p ,  \dot{\varepsilon}_p \right ) .
-    \tag{34}
-  \end{equation}
-  Thus, substituting (34) into (A1) yields
-  \begin{equation}
-    2 \mu \left ( \mathbf{Q} : \dot{\mathbf{e}} - \sqrt{\frac{3}{2}} \dot{\varepsilon_p} \right ) = \left ( \frac{\partial f}{\partial \varepsilon_p} \right ) \dot{\varepsilon}_p + \left ( \frac{\partial f}{\partial \dot{\varepsilon}_p} \right ) \ddot{\varepsilon}_p
-    \tag{A2}
-  \end{equation}
-  which is a second order differential equation for the equivalent plastic strain.  It is not clear that the proposed procedure described in sections 6 and 7 actually solve this second order equation for $\varepsilon_p$.
+%
+  \item In section 4.3, it should be stated that the EPP model is the one discussed in section 2.2, so readers can easily find this.
+%
      {\color{red}
      \begin{itemize}
-       \item What is derived in the paper is the finite differencing scheme for solving for an increment of equivalent plastic strain.  There is no need to consider the continous derivatives when we do this.  Nevertheless I will start with equation (A1) and show that it equals the final result from the paper.  Taking the right-hand equality from (A1) we can substitute (39)\footnote{\color{red} Equation numbers refer to equation numbers in original paper, not the revision} for $\mathbf{Q:\dot{e}}$. Noting that because $\mathbf{Q}$ and $\mathbf{\dot{e}}$ are symmetric tensors $\mathbf{Q:\dot{e}} = \mathbf{\dot{e}:Q}$.
-        \begin{equation}
-	  2 \mu \left ( \dot{e} - \sqrt{\frac{3}{2}} \dot{\varepsilon}_p \right ) = \sqrt{\frac{2}{3}} \dot{G}
-	    \tag{B1}
-	  \end{equation}
-	  Now substitute (38) and (41)
-	  \begin{equation}
-	    2 \mu \dot{e}^e = \sqrt{\frac{2}{3}} \dot{G}
-	    \tag{B2}
-	  \end{equation}
-	  Convert from continous derivatives to rates.
-	  \begin{equation}
-	    2 \mu \frac{\Delta e_{t-\Delta t/2}^e}{\Delta t} = \sqrt{\frac{2}{3}} \frac{\Delta G_{t-\Delta t/2}}{\Delta t}
-	    \tag{B3}
-	  \end{equation}
-	  Multiply by $\Delta t$ and expand the RHS of (B3)
-	  \begin{equation}
-	    2 \mu {\Delta e_{t-\Delta t/2}^e} = \sqrt{\frac{2}{3}} \left ( G_{t}- G_{t-\Delta t} \right )
-	    \tag{B4}
-	  \end{equation}
-	  and of course $G_t = \sqrt{3/2} S_t$ and similary for $G_{t-\Delta t}$, using these in (B4)
-	  \begin{equation}
-	    2 \mu {\Delta e_{t-\Delta t/2}^e} = S_t - S_{t-\Delta t}
-	    \tag{B5}
-	  \end{equation}
-	  finally substituting the rate form of (41) and rearranging we have:
-	  \begin{equation}
-	    \Delta e_{t-\Delta t/2} - \frac{S_t - S_{t-\Delta t}}{2 \mu} - \Delta \lambda_{t-\Delta t/2} = 0
-	    \tag{B6}
-	  \end{equation}
-	  (B6) is exactly (44).  The rest of derivation follows the paper from (44).
+        \item Reference to EPP model equation added
      \end{itemize}}
- %
-  \item Line 7 after (8).  $\mathbf{K}$  is a second order moment not a first order moment since $\boldsymbol{\xi} \otimes \boldsymbol{\xi}$ is a quadratic term.
+%
+  \item I don’t understand why the residual displacements in Figure 9 are greater than the loaded displacements in Figure 8. Are these two different loading conditions?
+%
      {\color{red}
      \begin{itemize}
-        \item The description of $\mathbf{K}$ as a moment has been removed in the revision.
+        \item The residual displacements are actually a little more then 10\% of the loaded displacements, so the plots are on difference scales. Text has been added to make that clearer.
      \end{itemize}}
-     %
-  \item The value of $\delta$ used for the simulations should be specified.  In this regard, it would be good to also state how many material points used in the simulation fit into this sphere of radius $\delta$. 
+%
+  \item Please define the material and damage model used in Figure 11; also define “node health”. Alternatively, since damage modeling within the new beam theory is sure to be an interesting and deep subject that merits careful analysis, the authors may wish to consider writing a separate paper about this.
+%
      {\color{red}
      \begin{itemize}
-        \item Suggestion was included in revision along with additional discussion about how changing $\delta$ makes insignificant changes in the solution of the Taylor impact problem.
+        \item Added a short description of the brittle model to the end of section 2.2. Node health is defined in the text referencing the model, but is edited for clarity
+        \begin{quote}
+          This is borne out by the results in figure 11, in which ``Nodal Health'' represents the fraction of bond-pairs about each node that have \underline{never exceeded their critical angle and therefore } \underline{have} not failed.
+        \end{quote}
      \end{itemize}}
-        %
-  \item Figure 2 refers to true strain but the measure $\mathbf{E}$ in (61) is the Lagranian strain.  Please provide a definition of the strain measure being used for true strain in Fig. 2. 
+%
+  \item Similarly, in section 5, the authors should not refer to “the proposed damage model” since there isn’t really a discussion of a damage model in the paper.
+%
      {\color{red}
      \begin{itemize}
-        \item Suggestion was included in revision.
+        \item Changed the wording of the conclusion:
+        \begin{quote}
+          The \cancel{proposed} \underline{perfect plasticity and simple brittle} damage models successfully reproduce the impact of nonlinear \cancel{elasticity} \underline{behaviors} on deformation of a rectangular cantilever, and the framework is laid to allow application of the same models to I-beams.
+        \end{quote}
      \end{itemize}}
+%
 \end{enumerate}
 
 
