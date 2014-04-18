@@ -35,7 +35,7 @@ To sync your local repo with `origin master` on github:
 git pull
 ````
 
-### Creating a $\LaTeX$ Diff from the repository
+### Creating a LaTeX diff from the repository
 
 ```
 latexdiff-vc -r 207e8e9 --math-markup=0 BeamPaper.tex
