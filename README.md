@@ -3,6 +3,8 @@ Beam Paper
 
 Collaborative journal paper on peridynamic beams
 
+Made public after publication see DOI:[10.1016/j.ijsolstr.2014.05.014](http://dx.doi.org/10.1016/j.ijsolstr.2014.05.014)
+
 
 To clone:
 
